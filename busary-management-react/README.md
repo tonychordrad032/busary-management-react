@@ -24,8 +24,8 @@ CoreUI is meant to be the UX game changer. Pure & transparent code is devoid of 
 
 ## Quick Start
 
-- [Download the latest release](https://github.com/coreui/coreui-pro-react-admin-template-starter/archive/refs/heads/main.zip)
-- Clone the repo: `git clone https://github.com/coreui/coreui-pro-react-admin-template-starter.git`
+- [Download the latest release](https://github.com/coreui/coreui-pro-react-admin-template/archive/refs/heads/main.zip)
+- Clone the repo: `git clone https://github.com/coreui/coreui-pro-react-admin-template.git`
 
 ### Instalation
 
@@ -43,7 +43,10 @@ $ yarn install
 
 ``` bash
 # dev server with hot reload at http://localhost:3000
-$ npm start
+$ npm start 
+
+# if you use Node 17+ use this command instead of `npm start`
+$ npm run start:n17 
 ```
 
 or 
@@ -51,6 +54,9 @@ or
 ``` bash
 # dev server with hot reload at http://localhost:3000
 $ yarn start
+
+# if you use Node 17+ use this command instead of `yarn start`
+$ yarn start:n17 
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
@@ -62,6 +68,9 @@ Run `build` to build the project. The build artifacts will be stored in the `bui
 ```bash
 # build for production with minification
 $ npm run build
+
+# if you use Node 17+ use this command instead of `build run build`
+$ npm run build:n17 
 ```
 
 or
@@ -69,6 +78,9 @@ or
 ```bash
 # build for production with minification
 $ yarn build
+
+# if you use Node 17+ use this command instead of `yarn build`
+$ yarn build:n17 
 ```
 
 ## What's included
@@ -76,7 +88,7 @@ $ yarn build
 Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You'll see something like this:
 
 ```
-coreui-pro-react-admin-template-starter
+coreui-pro-react-admin-template
 ├── public/          # static files
 │   └── index.html   # html template
 │
@@ -104,7 +116,7 @@ The documentation for the CoreUI Admin Template is hosted at our website [CoreUI
 
 For transparency into our release cycle and in striving to maintain backward compatibility, CoreUI Free Admin Template is maintained under [the Semantic Versioning guidelines](http://semver.org/).
 
-See [the Releases section of our project](https://github.com/coreui/coreui-pro-react-admin-template-starter/releases) for changelogs for each release version.
+See [the Releases section of our project](https://github.com/coreui/coreui-pro-react-admin-template/releases) for changelogs for each release version.
 
 ## Creators
 
@@ -125,7 +137,7 @@ Get updates on CoreUI's development and chat with the project maintainers and co
 
 ## Copyright and License
 
-copyright 2022 creativeLabs Łukasz Holeczek.   
+copyright 2023 creativeLabs Łukasz Holeczek.   
 
 You must have a valid license purchased to legally use this product for
 your projects.
