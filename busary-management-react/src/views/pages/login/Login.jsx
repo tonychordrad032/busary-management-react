@@ -16,12 +16,14 @@ import {
   CAlert,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
+import { useNavigate } from 'react-router-dom'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import logo from 'src/assets/images/dut_logo.png'
 //import ReCAPTCHA from 'react-google-recaptcha'
 import '../../../App.css'
 
 const Login = () => {
+  const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -29,7 +31,9 @@ const Login = () => {
   const [env, setEnv] = useState('')
   const [baseURL, setBaseURL] = useState('')
 
-  const handleSave = () => {}
+  const handleSave = () => {
+    navigate('/dashboard')
+  }
 
   return (
     <div className="bg-primary-gradient_ bg_login min-vh-100 d-flex flex-row align-items-center">

@@ -1,4 +1,6 @@
+import { element } from 'prop-types'
 import React from 'react'
+import ListDepartments from './views/administration/departments/ListAllDepartments'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -53,6 +55,9 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const SmartTable = React.lazy(() => import('./views/smart-table/SmartTable'))
 
+// Administration
+const ListAllFucalties = React.lazy(() => import('./views/administration/departments/ListAllDepartments'))
+
 // Plugins
 const Calendar = React.lazy(() => import('./views/plugins/calendar/Calendar'))
 const Charts = React.lazy(() => import('./views/plugins/charts/Charts'))
@@ -65,6 +70,13 @@ const Invoice = React.lazy(() => import('./views/apps/invoicing/Invoice'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  { path: '/list-departments', name: 'ListAllDepartments', element: ListDepartments},
+
+
+
+
+
+
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
