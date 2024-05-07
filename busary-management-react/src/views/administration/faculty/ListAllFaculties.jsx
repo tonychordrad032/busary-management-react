@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HttpFunction from 'src/core/HttpFunction';
 import { AppPagination } from 'src/components';
-import DepartmentModal from 'src/views/administration/departments/DepartmentModal'
+import FacultyModal from 'src/views/administration/faculty/FacultyModal'
 import {
     Table,
 } from 'react-bootstrap'
@@ -28,9 +28,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SecurityEnum } from 'src/core/SecurityEnum';
 
-const ListDepartments = () => {
+const ListAllFaculties = () => {
     const [isLoading, setLoading] = useState(false);
-    const [departmentList, setSetDepartmentLis] = useState([]);
     const [facultyList, setFacultyList] = useState([]);
     const [role, setRole] = useState("");
     
@@ -54,33 +53,6 @@ const ListDepartments = () => {
 
     //Fetch regions from server
     const fetchData = async (currentPage_, searchText_) => {
-        setLoading(true);
-        console.log("Start fetching departments")
-        var url = `/api/v1/department?page=${currentPage_ - 1}&size=10&sort=departmentName&searchText=${searchText_}`;
-      
-      
-        const apiCall = await http.get(url);
-       
-        if(apiCall.code === 200) {
-          console.log(apiCall.data.content);
-          setSetDepartmentLis(apiCall.data.content);
-       
-          //Pagination
-          setTotalElements(apiCall.data.totalElements);
-          setTotalPages(apiCall.data.totalPages);
-          setLoading(false);
-        
-        }else if(apiCall === 204){
-          console.log("Empty search");
-          setLoading(false);
-        }else{
-          console.log('error occurred!!!', apiCall);
-          toast.error('error occurred!!!', Toast.getToastOptions());
-          setLoading(false);
-        }
-    }
-
-    const fetchFacultyData = async (currentPage_, searchText_) => {
         setLoading(true);
         var url = `/api/v1/faculty?page=${currentPage_ - 1}&size=10&sort=facultyName&searchText=${searchText_}`
         console.log("My URL");
@@ -115,7 +87,6 @@ const ListDepartments = () => {
     useEffect(() => {
         userProfile();
         fetchData(1, '');
-        fetchFacultyData(1, '');
     }, []);
 
   return (
@@ -127,25 +98,24 @@ const ListDepartments = () => {
                     <div className='row'>
                         <div className='col-6'></div>
                         <div className='col-6 text-end'>
-                        <DepartmentModal 
+                        <FacultyModal 
                             fetchData={fetchData}
                             role={role}
-                            facultyList= {facultyList}
                         />
                         </div>
                     </div>
                 </CCardHeader>
                     <CCardBody>
                         <div className='row mb-2'>
-                              <div className='col-8'>There are <strong>{departmentList.length}</strong> departments in the system</div>
+                              <div className='col-8'>There are <strong>{facultyList.length}</strong> faculties in the system</div>
                             <div className='col-4'>
                                 <CInputGroup>
                                     <CFormInput
                                         type="text"
-                                        placeholder="Search department"
+                                        placeholder="Search faculty"
                                         onChange={(e) => setSearchText(e.target.value)}
                                         value={searchText}
-                                        feedbackInvalid="Enter department name"
+                                        feedbackInvalid="Enter faculty name"
                                     />
                                     <CButton type="button" color="secondary" variant="outline" onClick={handleClear}><FontAwesomeIcon icon={faTimes} /></CButton>
                                     <CButton type="button" color="secondary" variant="outline" onClick={handleSearch}><FontAwesomeIcon icon={faSearch} /></CButton>
@@ -158,25 +128,24 @@ const ListDepartments = () => {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Department Name</th>
-                                            <th>Fuculty</th>
+                                            <th>Faculty Name</th>
+                                            <th>Date Added</th>
                                             <th className='text-end'>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {
-                                              departmentList.map((x, i) =>
+                                              facultyList.map((x, i) =>
                                                 <tr key={i}>
                                                     <td>{i + 1}</td>
-                                                    <td>{x?.departmentName}</td>
-                                                    <td>{x?.faculty?.facultyName}</td>
+                                                    <td>{x?.facultyName}</td>
+                                                    <td>{x?.dateAdded}</td>
                                                     <td className='text-end'>
-                                                        <DepartmentModal 
+                                                        <FacultyModal 
                                                             fetchData={fetchData}
                                                             action='update'
                                                             data={x}
                                                             role={role}
-                                                            facultyList= {facultyList}
                                                         />
                                                     </td>
                                                 </tr>
@@ -203,4 +172,4 @@ const ListDepartments = () => {
   )
 }
 
-export default ListDepartments
+export default ListAllFaculties

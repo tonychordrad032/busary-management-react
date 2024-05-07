@@ -1,17 +1,1 @@
-package com.varsitygiene.bursarymanagementapi.microservices.application;
 
-import com.varsitygiene.bursarymanagementapi.microservices.users.User;
-import lombok.Data;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Data
-@Entity(name = "tbl_applications")
-public class Application extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long applicationId;
-}

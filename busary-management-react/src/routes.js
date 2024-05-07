@@ -56,7 +56,8 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const SmartTable = React.lazy(() => import('./views/smart-table/SmartTable'))
 
 // Administration
-const ListAllFucalties = React.lazy(() => import('./views/administration/departments/ListAllDepartments'))
+const ListAllDepartments = React.lazy(() => import('./views/administration/departments/ListAllDepartments'));
+const ListAllFaculties = React.lazy(() => import('./views/administration/faculty/ListAllFaculties'))
 
 // Plugins
 const Calendar = React.lazy(() => import('./views/plugins/calendar/Calendar'))
@@ -70,7 +71,8 @@ const Invoice = React.lazy(() => import('./views/apps/invoicing/Invoice'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/list-departments', name: 'ListAllDepartments', element: ListDepartments},
+  { path: '/list-departments', name: 'ListAllDepartments', element: ListAllDepartments},
+  { path: '/list-faculties', name: 'ListAllFaculties', element: ListAllFaculties},
 
 
 

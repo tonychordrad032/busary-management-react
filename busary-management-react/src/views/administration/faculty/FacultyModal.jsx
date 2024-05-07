@@ -33,18 +33,15 @@ const FacultyModal = (props) => {
     
     // Form Field
     const [facultyId, setFacultyId] = useState(0);
-    const [facultyList, setFacultyList] = useState([]);
-    const [departmentId, setDepartmentId] = useState(0);
-    const [departmentName, setDepartmentName] = useState("");
+    const [facultyName, setFacultyName] = useState("");
 
     const http = new HttpFunction();
 
     // Initialize form field, on modal load
-    const InitializeFormFields = (departmentObj) => {
+    const InitializeFormFields = (facultyObj) => {
         setLoading(true);
-        setDepartmentId(departmentObj?.departmentId);
-        setFacultyId(departmentObj?.faculty?.facultyId);
-        setDepartmentName(departmentObj?.departmentName ?? '');
+        setFacultyId(facultyObj?.facultyId);
+        setFacultyName(facultyObj?.facultyName ?? '');
         setLoading(false);
     }
 
@@ -55,14 +52,11 @@ const FacultyModal = (props) => {
 
     //Handle Save
     const handleSave = async () => {
-        if (departmentName !== '' && departmentName !== undefined && departmentId !== '' || departmentId !== undefined) {
+        if (facultyName !== '' && facultyName !== undefined ) {
             setLoading(true);
             let data = {
-                "departmentId": departmentId,
-                "departmentName": departmentName,
-                "faculty": {
-                  "facultyId": facultyId
-                }
+                "facultyId": facultyId,
+                "facultyName": facultyName
               }
 
               console.log(data);
@@ -70,17 +64,17 @@ const FacultyModal = (props) => {
               let res;
 
               if(props.action === 'update' && !deleteObj) {
-                  if (window.confirm(`Are you sure you want to update ${departmentName}?`) != true) {
+                  if (window.confirm(`Are you sure you want to update ${facultyName}?`) != true) {
                       return;
                   }
-                  res = await http.update('/api/v1/department', data);
+                  res = await http.update('/api/v1/faculty', data);
               }else if(deleteObj){
-                  if (window.confirm(`Are you sure you want to delete ${departmentName}?`) != true) {
+                  if (window.confirm(`Are you sure you want to delete ${facultyName}?`) != true) {
                     return;
                 }
-                  res = await http.delete('/api/v1/department/' + departmentId);
+                  res = await http.delete('/api/v1/faculty/' + facultyId);
               }else{
-                res = await http.post('/api/v1/department', data);
+                res = await http.post('/api/v1/faculty', data);
               }
 
             if(res.code === 200 || res.code === 201) {
@@ -112,14 +106,14 @@ const FacultyModal = (props) => {
     };
 
     const clearForm = () => {
-        setDepartmentId('');
-        setDepartmentName('');
+        setFacultyId('');
+        setFacultyName('');
     }
 
 
     
     useEffect(() => {
-        //fetchFacultyData(1, '');
+        //fetchData(1, '');
         console.log('useEffect', props);
         InitializeFormFields(props.data);
         
@@ -149,34 +143,19 @@ const FacultyModal = (props) => {
               backdrop={'static'}
           >
               <CModalHeader>
-                  <CModalTitle>{props.action === 'update' ? 'Update Department' : 'New Department'}</CModalTitle>
+                  <CModalTitle>{props.action === 'update' ? 'Update Faculty' : 'New Faculty'}</CModalTitle>
               </CModalHeader>
               <CModalBody>
                   <CForm 
                     noValidate
                     validated={validated}  
                     >
-                        <CFormSelect 
-                            aria-label="Select Faculty"
-                            label="Faculty"
-                            onChange={(e) => setFacultyId(e.target.value)}
-                            required
-                            value={facultyId}>
-
-                            <option value="">Select Faculty</option>
-                            {
-                            props.facultyList && props.facultyList.map((x,i)=>
-                                <option key={i} value={x.facultyId}>{x.facultyName}</option>
-                            )
-                            
-                            }  
-                        </CFormSelect>
                         <CFormInput
                           type="text"
-                          label="Department Name"
-                          placeholder="Enter Department Name"
-                          onChange={(e) => setDepartmentName(e.target.value)}
-                          value={departmentName}
+                          label="Faculty Name"
+                          placeholder="Enter Faculty Name"
+                          onChange={(e) => setFacultyName(e.target.value)}
+                          value={facultyName}
                           required
                       />
                   </CForm>
@@ -192,7 +171,7 @@ const FacultyModal = (props) => {
 
                   {
                       (props.role == 'Administrator') &&
-                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete {departmentName}</CButton>
+                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete</CButton>
                   }
               </CModalFooter>
           </CModal>

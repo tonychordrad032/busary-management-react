@@ -3,6 +3,7 @@ package com.varsitygiene.bursarymanagementapi.microservices.faculty;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,11 @@ public class FacultyController {
     public ResponseEntity save(@RequestBody Faculty faculty) {
         String correlationId = UUID.randomUUID().toString();
         return facultyService.save(faculty, correlationId);
+    }
+
+    @GetMapping
+    public ResponseEntity listAllPageable(Pageable pageable, @RequestParam String searchText){
+        return facultyService.listAllPageAble(pageable, searchText);
     }
 
 

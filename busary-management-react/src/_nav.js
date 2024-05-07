@@ -21,26 +21,26 @@ import {
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react-pro'
 
 const _nav = [
-  {
-    component: CNavItem,
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info-gradient',
-      text: 'NEW',
-    },
-  },
-  {
-    component: CNavItem,
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info-gradient',
-      text: 'NEW',
-    },
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Dashboard',
+  //   to: '/dashboard',
+  //   icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+  //   badge: {
+  //     color: 'info-gradient',
+  //     text: 'NEW',
+  //   },
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Dashboard',
+  //   to: '/dashboard',
+  //   icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+  //   badge: {
+  //     color: 'info-gradient',
+  //     text: 'NEW',
+  //   },
+  // },
   {
     component: CNavGroup,
     name: 'Administrations',
@@ -49,8 +49,8 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'Falcuties',
-        to: '/buttons/buttons',
+        name: 'Faculties',
+        to: '/list-faculties',
       },
       {
         component: CNavItem,

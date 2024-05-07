@@ -4,6 +4,7 @@ import com.varsitygiene.bursarymanagementapi.microservices.faculty.Faculty;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @GetMapping()
-    public ResponseEntity<ResponseResult> listAllSearch() {
-        return ResponseEntity.ok().body(new ResponseResult(200, "List of departments", departmentRepository.findAll()));
+    public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText) {
+        return  departmentService.listAllPageAble(pageable, searchText);
     }
 
     @PostMapping
