@@ -37,6 +37,8 @@ const QualificationModal = (props) => {
     const [institution, setInstitution] = useState("");
     const [enrolmentStatus, setEnrolmentStatus] = useState("");
 
+    const [enrolmentStatusList, setEnrolmentStatusList] = useState([]);
+
     const http = new HttpFunction();
 
     // Initialize form field, on modal load
@@ -119,10 +121,31 @@ const QualificationModal = (props) => {
         setEnrolmentStatus('');
     }
 
+     //Fetch enrolment status from server
+     const fetchEnrolmentStatusData = async () => {
+        setLoading(true);
+        var url = `/api/v1/support-apis/enrolment-status`
+        console.log("My URL");
+        console.log(url);
+        const apiCall = await http.get(url);
+        if (apiCall.code === 200) {
+            console.log("INSIDE THE IF");
+            console.log(apiCall.data);
+            setEnrolmentStatusList(apiCall.data);
+            setLoading(false);
+        } else {
+            console.log('error occurred!!!', apiCall);
+            //toast.error('error occurred!!!', Toast.getToastOptions());
+            setLoading(false);
+        }
+    }
+
+
 
     
     useEffect(() => {
         //fetchData(1, '');
+        fetchEnrolmentStatusData();
         console.log('useEffect', props);
         InitializeFormFields(props.data);
         
@@ -175,14 +198,21 @@ const QualificationModal = (props) => {
                           value={institution}
                           required
                       />
-                      <CFormInput
-                          type="text"
-                          label="Enrolment Status"
-                          placeholder="Enter Enrolment Status"
-                          onChange={(e) => setEnrolmentStatus(e.target.value)}
-                          value={enrolmentStatus}
-                          required
-                      />
+                      <CFormSelect 
+                            aria-label="Select Enrolment Status"
+                            label="Enrolment Status"
+                            onChange={(e) => setEnrolmentStatus(e.target.value)}
+                            required
+                            value={enrolmentStatus}>
+
+                            <option value="">Select Faculty</option>
+                            {
+                            enrolmentStatusList.map((x,i)=>
+                                <option key={i} value={x}>{x}</option>
+                            )
+                            
+                            }  
+                        </CFormSelect>
                   </CForm>
               </CModalBody>
               <CModalFooter>

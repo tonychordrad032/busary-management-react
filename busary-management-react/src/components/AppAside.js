@@ -94,7 +94,7 @@ const AppAside = () => {
           </CNavItem>
         </CNav>
       </CSidebarHeader>
-      <CTabContent>
+      {/* <CTabContent>
         <CTabPane visible={activeKey === 1}>
           <CListGroup flush>
             <CListGroupItem className="list-group-item border-start-4 border-start-secondary bg-light dark:bg-white dark:bg-opacity-10 dark:text-medium-emphasis text-center fw-bold text-medium-emphasis text-uppercase small">
@@ -320,7 +320,7 @@ const AppAside = () => {
           <CProgress thin color="success-gradient" value={10} />
           <small className="text-medium-emphasis">25GB/256GB</small>
         </CTabPane>
-      </CTabContent>
+      </CTabContent> */}
     </CSidebar>
   )
 }

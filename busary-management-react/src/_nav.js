@@ -86,6 +86,19 @@ const _nav = [
       }
     ],
   },
+  {
+    component: CNavGroup,
+    name: 'Bursary Applications',
+    to: '/buttons',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Bursary Applications',
+        to: '/list-bursary-applications',
+      }
+    ],
+  },
 
   // {
   //   component: CNavTitle,

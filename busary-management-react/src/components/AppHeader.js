@@ -90,11 +90,11 @@ const AppHeader = () => {
             />
           </CButtonGroup>
         </CHeaderNav>
-        <CHeaderNav>
+        {/* <CHeaderNav>
           <AppHeaderDropdownNotif />
           <AppHeaderDropdownTasks />
           <AppHeaderDropdownMssg />
-        </CHeaderNav>
+        </CHeaderNav> */}
         <CHeaderNav className="ms-3 me-4">
           <AppHeaderDropdown />
         </CHeaderNav>

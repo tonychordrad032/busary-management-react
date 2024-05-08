@@ -16,8 +16,8 @@ public class User extends Base {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long userId;
-  private String iamId, username, password, updateFrom, profilePicture, userGuid, otp, supplierNumber, comments="", appVersion="", deviceDetail="", ipAddress="", userGuidCreated="", userGuidUpdated="";
-  private String studentNumber, firstName, lastName, gender, userType, identityNumber, passportNumber, mobile;
+  private String iamId, username, password, updateFrom, profilePicture, userGuid, otp;
+  private String studentNumber, firstName, lastName, gender, userType, identityNumber, passportNumber, mobile, race;
 
   @JsonbDateFormat(value =  "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime lastLoginDate, passwordChangeDate;
