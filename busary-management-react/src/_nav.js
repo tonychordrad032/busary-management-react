@@ -73,6 +73,19 @@ const _nav = [
       // },
     ],
   },
+  {
+    component: CNavGroup,
+    name: 'Settings',
+    to: '/buttons',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Qualifications',
+        to: '/list-qualifications',
+      }
+    ],
+  },
 
   // {
   //   component: CNavTitle,

@@ -24,7 +24,7 @@ import HttpFunction from 'src/core/HttpFunction';
 import { Toast } from 'src/core/Toast';
 import LoadSpinner from 'src/components/LoadSpinner';
 
-const DepartmentModal = (props) => {
+const QualificationModal = (props) => {
     const [isLoading, setLoading] = useState(false);
 
     const [visible, setVisible] = useState(false);
@@ -32,19 +32,20 @@ const DepartmentModal = (props) => {
     const [deleteObj, setDeleteObj] = useState(false);
     
     // Form Field
-    const [facultyId, setFacultyId] = useState(0);
-    const [facultyList, setFacultyList] = useState([]);
-    const [departmentId, setDepartmentId] = useState(0);
-    const [departmentName, setDepartmentName] = useState("");
+    const [qualificationId, setQualificationId] = useState(0);
+    const [qualificationName, setQualificationName] = useState("");
+    const [institution, setInstitution] = useState("");
+    const [enrolmentStatus, setEnrolmentStatus] = useState("");
 
     const http = new HttpFunction();
 
     // Initialize form field, on modal load
-    const InitializeFormFields = (departmentObj) => {
+    const InitializeFormFields = (qualificationObj) => {
         setLoading(true);
-        setDepartmentId(departmentObj?.departmentId);
-        setFacultyId(departmentObj?.faculty?.facultyId);
-        setDepartmentName(departmentObj?.departmentName ?? '');
+        setQualificationId(qualificationObj?.qualificationId);
+        setQualificationName(qualificationObj?.qualificationName ?? '');
+        setInstitution(qualificationObj?.institution ?? "");
+        setEnrolmentStatus(qualificationObj?.enrolmentStatus ?? "");
         setLoading(false);
     }
 
@@ -55,14 +56,13 @@ const DepartmentModal = (props) => {
 
     //Handle Save
     const handleSave = async () => {
-        if (departmentName !== '' && departmentName !== undefined && departmentId !== '' || departmentId !== undefined) {
+        if (qualificationName !== '' && qualificationName !== undefined ) {
             setLoading(true);
             let data = {
-                "departmentId": departmentId,
-                "departmentName": departmentName,
-                "faculty": {
-                  "facultyId": facultyId
-                }
+                "qualificationId": qualificationId,
+                "qualificationName": qualificationName,
+                "institution": institution,
+                "enrolmentStatus": enrolmentStatus
               }
 
               console.log(data);
@@ -70,17 +70,18 @@ const DepartmentModal = (props) => {
               let res;
 
               if(props.action === 'update' && !deleteObj) {
-                  if (window.confirm(`Are you sure you want to update ${departmentName}?`) != true) {
+                  if (window.confirm(`Are you sure you want to update ${qualificationName}?`) != true) {
                       return;
                   }
-                  res = await http.update('/api/v1/department', data);
+                  res = await http.update('/api/v1/qualification', data);
               }else if(deleteObj){
-                  if (window.confirm(`Are you sure you want to delete ${departmentName}?`) != true) {
+                  if (window.confirm(`Are you sure you want to delete ${qualificationName}?`) != true) {
                     return;
                 }
-                  res = await http.delete('/api/v1/department/' + departmentId);
+                  console.log("My qualification ==> " + qualificationId)
+                  res = await http.delete('/api/v1/qualification?id=' + qualificationId);
               }else{
-                res = await http.post('/api/v1/department', data);
+                res = await http.post('/api/v1/qualification', data);
               }
 
             if(res.code === 200 || res.code === 201) {
@@ -112,14 +113,16 @@ const DepartmentModal = (props) => {
     };
 
     const clearForm = () => {
-        setDepartmentId('');
-        setDepartmentName('');
+        setQualificationId('');
+        setQualificationName('');
+        setInstitution('');
+        setEnrolmentStatus('');
     }
 
 
     
     useEffect(() => {
-        //fetchFacultyData(1, '');
+        //fetchData(1, '');
         console.log('useEffect', props);
         InitializeFormFields(props.data);
         
@@ -149,34 +152,35 @@ const DepartmentModal = (props) => {
               backdrop={'static'}
           >
               <CModalHeader>
-                  <CModalTitle>{props.action === 'update' ? 'Update Department' : 'New Department'}</CModalTitle>
+                  <CModalTitle>{props.action === 'update' ? 'Update Qualification' : 'New Qualification'}</CModalTitle>
               </CModalHeader>
               <CModalBody>
                   <CForm 
                     noValidate
                     validated={validated}  
                     >
-                        <CFormSelect 
-                            aria-label="Select Faculty"
-                            label="Faculty"
-                            onChange={(e) => setFacultyId(e.target.value)}
-                            required
-                            value={facultyId}>
-
-                            <option value="">Select Faculty</option>
-                            {
-                            props.facultyList && props.facultyList.map((x,i)=>
-                                <option key={i} value={x.facultyId}>{x.facultyName}</option>
-                            )
-                            
-                            }  
-                        </CFormSelect>
                         <CFormInput
                           type="text"
-                          label="Department Name"
-                          placeholder="Enter Department Name"
-                          onChange={(e) => setDepartmentName(e.target.value)}
-                          value={departmentName}
+                          label="Qualification Name"
+                          placeholder="Enter Qualification Name"
+                          onChange={(e) => setQualificationName(e.target.value)}
+                          value={qualificationName}
+                          required
+                      />
+                      <CFormInput
+                          type="text"
+                          label="Institution"
+                          placeholder="Enter Insttution Name"
+                          onChange={(e) => setInstitution(e.target.value)}
+                          value={institution}
+                          required
+                      />
+                      <CFormInput
+                          type="text"
+                          label="Enrolment Status"
+                          placeholder="Enter Enrolment Status"
+                          onChange={(e) => setEnrolmentStatus(e.target.value)}
+                          value={enrolmentStatus}
                           required
                       />
                   </CForm>
@@ -192,7 +196,7 @@ const DepartmentModal = (props) => {
 
                   {
                       (props.role == 'Administrator') &&
-                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete {departmentName}</CButton>
+                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete</CButton>
                   }
               </CModalFooter>
           </CModal>
@@ -200,4 +204,4 @@ const DepartmentModal = (props) => {
   )
 }
 
-export default DepartmentModal
+export default QualificationModal

@@ -38,13 +38,9 @@ public class QualificationController {
         return qualificationService.delete(id, correlationId);
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<Qualification>> listAllPageable(Pageable pageable, String searchText){
-//        return qualificationService.listAllPageAble(pageable, searchText);
-//    }
     @GetMapping
-    public ResponseEntity<ResponseResult> listAll(){
-        return ResponseEntity.ok().body(new ResponseResult(200, "List of qualifications", qualificationRepository.findAll().stream().filter(qualification -> qualification.getDeleted() == 0)));
+    public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText){
+        return qualificationService.listAllPageAble(pageable, searchText);
     }
 
 
