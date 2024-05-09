@@ -46,6 +46,54 @@ const BursaryApplicationModal = (props) => {
     const [fundingType, setFundingType] = useState("");
     const [fundingAwaiting, setFundingAwaiting] = useState("");
 
+    // Personal
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [IdentityNumber, setIdentityNumber] = useState("");
+    const [gender, setGender] = useState("");
+    const [race, setRace] = useState("");
+    const [isDisable, setIsDisable] = useState("");
+    const [age, setAge] = useState("");
+    const [homeLanguage, setHomeLanguage] = useState("");
+    const [citizenship, setCitizenship] = useState("");
+    const [birthCountry, setBirthCountry] = useState("");
+
+    // Contact Details
+    const [email, setEmail] = useState("");
+    const [mobile, setMobile] = useState("");
+    const [studyAndResAddressSame, setStudyAndResAddressSame] = useState("");
+    const [resPostalCode, setResPostalCode] = useState("");
+    const [suburb, setSuburb] = useState("");
+    const [municipality, setMunicipality] = useState("");
+    const [province, setProvince] = useState("");
+    const [areaClassification, setAreaClassification] = useState("");
+
+    // Education
+    const [qualification, setQualification] = useState("");
+    const [enrolmentType, setEnrolmentType] = useState("");
+    const [studentNumber, setStudentNumber] = useState("");
+    const [haveCompletedQualification, setHaveCompletedQualification] = useState("");
+    const [completedQualification, setCompletedQualification] = useState("");
+    const [currentLevel, setCurrentLevel] = useState("");
+    const [matricYear, setMatricYear] = useState("");
+    const [highSchoolName, setHighSchoolName] = useState("");
+    const [courseAverage, setCourseAverage] = useState("");
+    const [haveRepeatingModule, setHaveRepeatingModule] = useState("");
+    const [debt, setDebt] = useState("");
+    const [lastYearFundingType, setLastFundingType] = useState("");
+    const [sponsorship, setSponsorship] = useState("");
+    const [tuitionFee, setTuitionFee] = useState("");
+    const [residence, setResidence] = useState("");
+    const [residenceFee, setResidenceFee] = useState("");
+
+    // Employment
+    const [employmentStatus, setEmploymentStatus] = useState("");
+
+    
+
+
+
+
     const [fundingStatusList, setFundingStatusList] = useState([]);
     const [fundingTypeList, setFundingTypeList] = useState([]);
     const [fundingAwaitingList, setFundingAwaitingList] = useState([]);
@@ -352,10 +400,223 @@ const BursaryApplicationModal = (props) => {
                                 
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 2}>
-                                <h3>Personal Details</h3>
+                                <br/>
+                                <h5><b>Personal Details</b></h5>
+                                <br/>
+                                <CForm  noValidate validated={validated} onSubmit={handleSubmit}  >
+                                    <CCol md={8}>
+                                        <CFormInput
+                                            type="text"
+                                            label="First Name"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            value={firstName}
+                                            required
+                                            feedbackInvalid="Please first name"
+                                        />
+                                        <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Last Name"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            value={lastName}
+                                            required
+                                            feedbackInvalid="Please last name"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your South African ID Number *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setIdentityNumber(e.target.value)}
+                                            value={IdentityNumber}
+                                            required
+                                            feedbackInvalid="Please identity number"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Select your Gender *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setGender(e.target.value)}
+                                            value={gender}
+                                            required
+                                            feedbackInvalid="Please select gender"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Select your Race *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setRace(e.target.value)}
+                                            value={race}
+                                            required
+                                            feedbackInvalid="Please select race"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Do you have any disabilities? *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setIsDisable(e.target.value)}
+                                            value={isDisable}
+                                            required
+                                            feedbackInvalid="Please select valid option"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your current age *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setAge(e.target.value)}
+                                            value={age}
+                                            required
+                                            feedbackInvalid="Please enter your age"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your home language *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setHomeLanguage(e.target.value)}
+                                            value={homeLanguage}
+                                            required
+                                            feedbackInvalid="Please enter you home language"
+                                        />
+                                         
+                                        {homeLanguage === "Other" ?? <div>
+                                            <br />
+                                            <CFormInput
+                                            type="text"
+                                            label="If other, please specify *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setHomeLanguage(e.target.value)}
+                                            value={homeLanguage}
+                                            required
+                                            feedbackInvalid="Please last name"
+                                        />
+                                            </div>}
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Are you a South African? *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setCitizenship(e.target.value)}
+                                            value={citizenship}
+                                            required
+                                            feedbackInvalid="Please select citizenship"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="number"
+                                            label="Indicate you country of Birth *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setBirthCountry(e.target.value)}
+                                            value={birthCountry}
+                                            required
+                                            feedbackInvalid="Please country of birth"
+                                        />
+                                    </CCol>
+                                </CForm>
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 3}>
-                                <h3>Contact Details</h3>
+                            <br/>
+                                <h5><b>Contact Details</b></h5>
+                                <br/>
+                                <CForm  noValidate validated={validated} onSubmit={handleSubmit}  >
+                                    <CCol md={8}>
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your e-mail address. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={email}
+                                            required
+                                            feedbackInvalid="Please enter email"
+                                        />
+                                        <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your contact number. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setMobile(e.target.value)}
+                                            value={mobile}
+                                            required
+                                            feedbackInvalid="Please enter mobile"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Is your study address the same as your residential address *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setStudyAndResAddressSame(e.target.value)}
+                                            value={studyAndResAddressSame}
+                                            required
+                                            feedbackInvalid="Please select the option"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your Residential Address. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setResidence(e.target.value)}
+                                            value={residence}
+                                            required
+                                            feedbackInvalid="Please enter residential address"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your Residential Postal code. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setResPostalCode(e.target.value)}
+                                            value={resPostalCode}
+                                            required
+                                            feedbackInvalid="Please Residential Postal Code"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your Residential Suburb / District. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setSuburb(e.target.value)}
+                                            value={suburb}
+                                            required
+                                            feedbackInvalid="Please enter suburb"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your Municipality. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setMunicipality(e.target.value)}
+                                            value={municipality}
+                                            required
+                                            feedbackInvalid="Please enter municipality"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your Province. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setProvince(e.target.value)}
+                                            value={province}
+                                            required
+                                            feedbackInvalid="Please enter province"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Classify your residential address as RURAL / URBAN *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setAreaClassification(e.target.value)}
+                                            value={areaClassification}
+                                            required
+                                            feedbackInvalid="Please select classification area"
+                                        />
+                                    </CCol>
+                                </CForm>
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 4}>
                                 <h3>Education</h3>

@@ -1,6 +1,7 @@
 package com.varsitygiene.bursarymanagementapi.microservices.qualification;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.varsitygiene.bursarymanagementapi.microservices.deparments.Department;
 import com.varsitygiene.bursarymanagementapi.utils.dto.Base;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,9 @@ public class Qualification extends Base {
     private long qualificationId;
     private String qualificationName;
     private String institution;
-    private String enrolmentStatus;
+    private String enrolmentStatus, enrolmentType;
+    @ManyToOne
+    private Department department;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateAdded, dateUpdated;
 

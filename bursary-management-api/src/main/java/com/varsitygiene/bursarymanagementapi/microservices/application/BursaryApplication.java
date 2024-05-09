@@ -14,4 +14,6 @@ public class BursaryApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long bursaryApplicationId;
 
+    private String studentNumber;
+
 }
