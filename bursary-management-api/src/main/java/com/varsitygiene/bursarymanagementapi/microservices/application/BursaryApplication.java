@@ -1,5 +1,6 @@
 package com.varsitygiene.bursarymanagementapi.microservices.application;
 
+import com.varsitygiene.bursarymanagementapi.microservices.users.User;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -15,5 +16,7 @@ public class BursaryApplication {
     private long bursaryApplicationId;
 
     private String studentNumber;
+    
+    //private User applicant;
 
 }

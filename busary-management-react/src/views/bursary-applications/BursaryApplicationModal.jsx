@@ -32,6 +32,7 @@ import HttpFunction from 'src/core/HttpFunction';
 import { Toast } from 'src/core/Toast';
 import LoadSpinner from 'src/components/LoadSpinner';
 
+
 const BursaryApplicationModal = (props) => {
     const [isLoading, setLoading] = useState(false);
     const [ activeKey, setActiveKey] = useState(1);
@@ -97,6 +98,21 @@ const BursaryApplicationModal = (props) => {
     const [fundingStatusList, setFundingStatusList] = useState([]);
     const [fundingTypeList, setFundingTypeList] = useState([]);
     const [fundingAwaitingList, setFundingAwaitingList] = useState([]);
+    const [genderList, setGenderList] = useState([]);
+    const [raceList, setRaceList] = useState([]);
+    const [disabilityList, setDisabilityList] = useState([]);
+    const [enrolmentTypeList, setEnrolmentTypeList] = useState([]);
+    const [homeLanguageList, setHomeLanguageList] = useState([]);
+    const [citizenshipList, setCitizenshipList] = useState([]);
+    const [areaClassificationList, setAreaClassificationList] = useState([]);
+    const [qualificationList, setQualificationList] = useState([]);
+    const [levelOfStudyList, setLevelOfStudyList] = useState([]);
+    const [courseAverageList, setCourseAverageList] = useState([]);
+    const [sponsorshipList, setSponsorshipList] = useState([]);
+    const [residenceOptionList, setResidenceOptionList] = useState([]);
+    const [employmentStatusList, setEmploymentStatusList] = useState([]);
+    const [yesOrNoList, setYesOrNoList] = useState([]);
+ 
 
     const http = new HttpFunction();
 
@@ -173,54 +189,33 @@ const BursaryApplicationModal = (props) => {
         //setFacultyName('');
     }
 
-     //Fetch funding status from server
-     const fetchFundingStatusData = async () => {
+     //Fetch settings from server
+     const fetchSettingsData = async () => {
         setLoading(true);
-        var url = `/api/v1/support-apis/funding-status`
+        var url = `/api/v1/support-apis/settings`
         console.log("My URL");
         console.log(url);
         const apiCall = await http.get(url);
         if (apiCall.code === 200) {
             console.log("INSIDE THE IF");
             console.log(apiCall.data);
-            setFundingStatusList(apiCall.data);
-            setLoading(false);
-        } else {
-            console.log('error occurred!!!', apiCall);
-            //toast.error('error occurred!!!', Toast.getToastOptions());
-            setLoading(false);
-        }
-    }
-    //Fetch funding type from server
-    const fetchFundingTypeData = async () => {
-        setLoading(true);
-        var url = `/api/v1/support-apis/funding-type`
-        console.log("My URL");
-        console.log(url);
-        const apiCall = await http.get(url);
-        if (apiCall.code === 200) {
-            console.log("INSIDE THE IF");
-            console.log(apiCall.data);
-            setFundingStatusList(apiCall.data);
-            setLoading(false);
-        } else {
-            console.log('error occurred!!!', apiCall);
-            //toast.error('error occurred!!!', Toast.getToastOptions());
-            setLoading(false);
-        }
-    }
-
-    //Fetch funding awaiting from server
-    const fetchFundingAwaitingData = async () => {
-        setLoading(true);
-        var url = `/api/v1/support-apis/bursary-application-status`
-        console.log("My URL");
-        console.log(url);
-        const apiCall = await http.get(url);
-        if (apiCall.code === 200) {
-            console.log("INSIDE THE IF");
-            console.log(apiCall.data);
-            setFundingAwaitingList(apiCall.data);
+            setFundingStatusList(apiCall.data.fundingStatus);
+            setFundingTypeList(apiCall.data.fundingType);
+            setFundingAwaitingList(apiCall.data.bursaryApplicationStatus)
+            setRaceList(apiCall.data.race);
+            setGenderList(apiCall.data.gender);
+            setDisabilityList(apiCall.data.disability);
+            setEnrolmentTypeList(apiCall.data.enrolmentType);
+            setHomeLanguageList(apiCall.data.homeLanguage);
+            setCitizenshipList(apiCall.data.citizenship);
+            setAreaClassificationList(apiCall.data.classificationArea);
+            setQualificationList(apiCall.data.qualification);
+            setLevelOfStudyList(apiCall.data.levelOfStudy);
+            setCourseAverageList(apiCall.data.average);
+            setSponsorshipList(apiCall.data.sponsorship);
+            setResidenceOptionList(apiCall.data.residenceOption);
+            setEmploymentStatusList(apiCall.data.employmentStatus);
+            setYesOrNoList(apiCall.data.yesOrNo);
             setLoading(false);
         } else {
             console.log('error occurred!!!', apiCall);
@@ -233,9 +228,7 @@ const BursaryApplicationModal = (props) => {
     
     useEffect(() => {
         //fetchData(1, '');
-        fetchFundingStatusData();
-        fetchFundingTypeData();
-        fetchFundingAwaitingData();
+        fetchSettingsData();
         console.log('useEffect', props);
         InitializeFormFields(props.data);
         
@@ -369,7 +362,7 @@ const BursaryApplicationModal = (props) => {
 
                                                 <option value="">Choose...</option>
                                                 {
-                                                fundingStatusList.map((x,i)=>
+                                                fundingTypeList.map((x,i)=>
                                                     <option key={i} value={x}>{x}</option>
                                                 )
                                                 
@@ -435,38 +428,56 @@ const BursaryApplicationModal = (props) => {
                                             feedbackInvalid="Please identity number"
                                         />
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect 
+                                            aria-label="Select your Gender *"
                                             label="Select your Gender *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setGender(e.target.value)}
-                                            value={gender}
                                             required
-                                            feedbackInvalid="Please select gender"
-                                        />
+                                            value={gender}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            genderList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                          <br />
-                                        <CFormInput
-                                            type="text"
-                                            label="Select your Race *"
-                                            placeholder="Enter your answer"
+                                         <CFormSelect 
+                                            aria-label="Select your race *"
+                                            label="Select your race *"
                                             onChange={(e) => setRace(e.target.value)}
-                                            value={race}
                                             required
-                                            feedbackInvalid="Please select race"
-                                        />
+                                            value={race}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            raceList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect 
+                                            //aria-label="Select your Gender *"
                                             label="Do you have any disabilities? *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setIsDisable(e.target.value)}
-                                            value={isDisable}
                                             required
-                                            feedbackInvalid="Please select valid option"
-                                        />
+                                            value={isDisable}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            disabilityList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                          <br />
                                         <CFormInput
-                                            type="text"
+                                            type="number"
                                             label="Enter your current age *"
                                             placeholder="Enter your answer"
                                             onChange={(e) => setAge(e.target.value)}
@@ -475,16 +486,20 @@ const BursaryApplicationModal = (props) => {
                                             feedbackInvalid="Please enter your age"
                                         />
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect 
                                             label="Enter your home language *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setHomeLanguage(e.target.value)}
-                                            value={homeLanguage}
                                             required
-                                            feedbackInvalid="Please enter you home language"
-                                        />
-                                         
+                                            value={homeLanguage}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            homeLanguageList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                         {homeLanguage === "Other" ?? <div>
                                             <br />
                                             <CFormInput
@@ -498,15 +513,20 @@ const BursaryApplicationModal = (props) => {
                                         />
                                             </div>}
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect 
                                             label="Are you a South African? *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setCitizenship(e.target.value)}
-                                            value={citizenship}
                                             required
-                                            feedbackInvalid="Please select citizenship"
-                                        />
+                                            value={citizenship}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            citizenshipList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                          <br />
                                         <CFormInput
                                             type="number"
@@ -546,15 +566,20 @@ const BursaryApplicationModal = (props) => {
                                             feedbackInvalid="Please enter mobile"
                                         />
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect 
                                             label="Is your study address the same as your residential address *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setStudyAndResAddressSame(e.target.value)}
-                                            value={studyAndResAddressSame}
                                             required
-                                            feedbackInvalid="Please select the option"
-                                        />
+                                            value={studyAndResAddressSame}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            yesOrNoList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                          <br />
                                         <CFormInput
                                             type="text"
@@ -606,23 +631,263 @@ const BursaryApplicationModal = (props) => {
                                             feedbackInvalid="Please enter province"
                                         />
                                          <br />
-                                        <CFormInput
-                                            type="text"
+                                         <CFormSelect
                                             label="Classify your residential address as RURAL / URBAN *"
-                                            placeholder="Enter your answer"
                                             onChange={(e) => setAreaClassification(e.target.value)}
-                                            value={areaClassification}
                                             required
-                                            feedbackInvalid="Please select classification area"
-                                        />
+                                            value={areaClassification}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            areaClassificationList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
                                     </CCol>
                                 </CForm>
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 4}>
-                                <h3>Education</h3>
+                            <br/>
+                                <h5><b>Education</b></h5>
+                                <br/>
+                                <CForm  noValidate validated={validated} onSubmit={handleSubmit}  >
+                                    <CCol md={8}>
+                                        <CFormSelect 
+                                            label="Select Registered Qualification to determine if you can move ahead with submission of your details *"
+                                            onChange={(e) => setQualification(e.target.value)}
+                                            required
+                                            value={qualification}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            qualificationList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                        <br />
+                                        <CFormSelect 
+                                            label="Are you registered FULL-TIME for this qualification *"
+                                            onChange={(e) => setEnrolmentType(e.target.value)}
+                                            required
+                                            value={enrolmentType}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            enrolmentTypeList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Please enter your student number *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setStudentNumber(e.target.value)}
+                                            value={studentNumber}
+                                            required
+                                            feedbackInvalid="Please student number"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Have you completed any qualifications? *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setHaveCompletedQualification(e.target.value)}
+                                            value={haveCompletedQualification}
+                                            required
+                                            feedbackInvalid="Please enter complete qualification"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Indicate your completed qualification *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setCompletedQualification(e.target.value)}
+                                            value={completedQualification}
+                                            required
+                                            feedbackInvalid="Please enter complete qualification"
+                                        />
+                                         <br />
+                                         <CFormSelect 
+                                            label="Select the year of registration for your current qualification. *"
+                                            onChange={(e) => setCurrentLevel(e.target.value)}
+                                            required
+                                            value={currentLevel}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            levelOfStudyList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                        {currentLevel === "Other" ?? <div>
+                                            <br />
+                                            <CFormInput
+                                                type="text"
+                                                label="If other, please specify *"
+                                                placeholder="Enter your answer"
+                                                onChange={(e) => setCurrentLevel(e.target.value)}
+                                                value={currentLevel}
+                                                required
+                                                //feedbackInvalid="Please last name"
+                                            />
+                                            </div>}
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter your current age *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setAge(e.target.value)}
+                                            value={age}
+                                            required
+                                            feedbackInvalid="Please enter your age"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter the year you completed matric. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setMatricYear(e.target.value)}
+                                            value={matricYear}
+                                            required
+                                            //feedbackInvalid="Please enter you home language"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="Enter the name of your high school. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setHighSchoolName(e.target.value)}
+                                            value={highSchoolName}
+                                            required
+                                            feedbackInvalid="Please enter high school name"
+                                        />
+                                         <br />
+                                         <CFormSelect
+                                            label="Select your previous years average. *"
+                                            onChange={(e) => setCourseAverage(e.target.value)}
+                                            required
+                                            value={courseAverage}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            courseAverageList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                         <br />
+                                         <CFormSelect 
+                                            label="Are you currently repeating any modules from your previous year registration? *"
+                                            onChange={(e) => setHaveRepeatingModule(e.target.value)}
+                                            required
+                                            value={haveRepeatingModule}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            yesOrNoList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                         <br />
+                                         <CFormSelect 
+                                            label="Do you have any historic debt owed to DUT? *"
+                                            onChange={(e) => setDebt(e.target.value)}
+                                            required
+                                            value={debt}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            yesOrNoList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="How did you fund your previous year. If it was a bursary indicate the name of bursary or NSFAS or self funded. *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setLastFundingType(e.target.value)}
+                                            value={lastYearFundingType}
+                                            required
+                                            feedbackInvalid="Please select course average"
+                                        />
+                                         <br />
+                                        <CFormInput
+                                            type="text"
+                                            label="What funding resource did you use to pay for your 2021 year of studies? *"
+                                            placeholder="Enter your answer"
+                                            onChange={(e) => setSponsorship(e.target.value)}
+                                            value={sponsorship}
+                                            required
+                                            //feedbackInvalid="Please select course average"
+                                        />
+                                        {sponsorship === "Other" ?? <div>
+                                            <br />
+                                            <CFormInput
+                                                type="text"
+                                                label="If other, please specify *"
+                                                placeholder="Enter your answer"
+                                                onChange={(e) => setSponsorship(e.target.value)}
+                                                value={sponsorship}
+                                                required
+                                                //feedbackInvalid="Please last name"
+                                            />
+                                            </div>}
+                                            <br />
+                                            <CFormSelect 
+                                                label="Do you pay for residence or stay at home? *"
+                                                onChange={(e) => setResidence(e.target.value)}
+                                                required
+                                                value={residence}>
+
+                                                <option value="">Choose...</option>
+                                                {
+                                                residenceOptionList.map((x,i)=>
+                                                    <option key={i} value={x}>{x}</option>
+                                                )
+                                                
+                                                }  
+                                            </CFormSelect>
+                                    </CCol>
+                                </CForm>
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 5}>
-                                <h3>Employment</h3>
+                            <br/>
+                                <h5><b>Personal Details</b></h5>
+                                <br/>
+                                <CForm  noValidate validated={validated} onSubmit={handleSubmit}  >
+                                    <CCol md={8}>
+                                         <CFormSelect 
+                                            label="Enter your latest Employment status. *"
+                                            onChange={(e) => setEmploymentStatus(e.target.value)}
+                                            required
+                                            value={employmentStatus}>
+
+                                            <option value="">Choose...</option>
+                                            {
+                                            employmentStatusList.map((x,i)=>
+                                                <option key={i} value={x}>{x}</option>
+                                            )
+                                            
+                                            }  
+                                        </CFormSelect>
+                                       
+                                    </CCol>
+                                </CForm>
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 6}>
                                 <h3>Documents</h3>
