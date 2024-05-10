@@ -13,7 +13,7 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long documentId;
     private long fileSize=0, deleted=0;
-    private String fileName="", fileType="";
+    private String fileName="", fileType="", documentType = "";
     private LocalDateTime capturedDate;
     private LocalDateTime dateAdded;
     private LocalDateTime dateUpdated;

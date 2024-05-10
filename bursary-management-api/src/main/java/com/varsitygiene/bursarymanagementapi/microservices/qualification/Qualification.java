@@ -18,7 +18,7 @@ public class Qualification extends Base {
     private long qualificationId;
     private String qualificationName;
     private String institution;
-    private String enrolmentStatus, enrolmentType;
+    private String enrolmentStatus, enrolmentType, levelOfStudy, courseAverage;
     @ManyToOne
     private Department department;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
