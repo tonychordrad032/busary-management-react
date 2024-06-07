@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v2/auth")
+@RequestMapping("/api/v1/auth")
 public class AppAuth {
-/*
+
     private static Logger LOG = LoggerFactory.getLogger(AppAuth.class);
 
     @Value("${iam.baseurl:default}")
@@ -78,6 +79,7 @@ public class AppAuth {
 
     public ResponseEntity<Map> login(String username, String password) {
     try {
+        LOG.info("Start login in");
       String url = BASE_URL + "/realms/" + REALM + "/protocol/openid-connect/token";
       //LOG.info(url);
       //LOG.info(username);
@@ -93,10 +95,14 @@ public class AppAuth {
       map.add("scope", SCOPE);
       map.add("username", username);
       map.add("password", password);
+      restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
       HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(map, headers);
+      LOG.info("MY  ENTITY => {}", entity);
 
       ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+        LOG.info("THE RESPONSE CODE => {}", response.getStatusCode());
+        LOG.info("THE RESPONSE BODY => {}", response.getBody());
 
       return response;
     }catch (Exception e) {
@@ -204,6 +210,8 @@ public class AppAuth {
     public ResponseEntity<Map> createAppUser(User user) {
         try {
             String url = BASE_URL + "/admin/realms/" + REALM + "/users";
+            LOG.info("MY URL -> {}", url);
+            LOG.info("Username: {}, Password: {}", USERNAME, PASSWORD);
 
             ResponseEntity<Map> resLogin = login(USERNAME, PASSWORD);
 
@@ -213,15 +221,13 @@ public class AppAuth {
 
             String requestJson = "{\n  \"createdTimestamp\": 1588880747548,\n  \"username\": \"" + user.getUsername() + "\",\n  \"enabled\": true,\n  \"totp\": false,\n  \"emailVerified\": true,\n  \"firstName\": \"" + user.getFirstName() + "\",\n  \"lastName\": \"" + user.getLastName() + "\",\n  \"email\": \"" + user.getUsername() + "\",\n  \"disableableCredentialTypes\": [],\n  \"requiredActions\": [],\n  \"notBefore\": 0,\n  \"credentials\":[{\"type\":\"password\",\"value\":\"" + user.getPassword() + "\",\"temporary\":false}],\n  \"attributes\": {\n      \"Source Client\":\"" + CLIENTID + "\"\n  },\n  \"access\": {\n    \"manageGroupMembership\": true,\n    \"view\": true,\n    \"mapRoles\": true,\n    \"impersonate\": true,\n    \"manage\": true\n  },\n  \"clientRoles\": {\n    \""+ CLIENTID +"\": [\"user\", \"admin\"]\n  },\n  \"realmRoles\": [\"user\",\"admin\"]\n}";
 
-            //LOG.info(resLogin.getBody().get("access_token").toString());
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(resLogin.getBody().get("access_token").toString());
 
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
             HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-
+            LOG.info("My entity {}", entity);
             ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
             LOG.info("response {}", response);
             return response;
@@ -233,5 +239,5 @@ public class AppAuth {
             }
             return null;
         }
-    }*/
+    }
 }

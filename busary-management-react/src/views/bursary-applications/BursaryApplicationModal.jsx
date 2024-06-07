@@ -91,10 +91,6 @@ const BursaryApplicationModal = (props) => {
     const [employmentStatus, setEmploymentStatus] = useState("");
 
     
-
-
-
-
     const [fundingStatusList, setFundingStatusList] = useState([]);
     const [fundingTypeList, setFundingTypeList] = useState([]);
     const [fundingAwaitingList, setFundingAwaitingList] = useState([]);

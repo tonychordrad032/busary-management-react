@@ -88,12 +88,38 @@ public class UserService {
         return ResponseEntity.status(409).body(new ResponseResult(409, "User with mobile " + user.getMobile() + " Already exist", null));
       }
 
-      User uO = getUserByHttpRequest(request);
-      if(uO != null) {
-        user.setUserUpdated(uO);
-        user.setUserCreated(uO);
-      }
+      //Calling keycloak service
+      ResponseEntity<Map> res = appAuth.createAppUser(user);
+      LOG.info("ToString -> " + res.toString());
+      LOG.info("Code Status -> " + res.getStatusCode().toString());
+      LOG.info("Body -> " + res.getBody());
 
+      if (res.getStatusCode().value() == 201) {
+        LOG.info("In 201");
+        ResponseEntity<List> users = appAuth.getUser(user.getUsername());
+        LOG.info("users {}", users);
+        List<Map<String, Object>> listss = users.getBody();
+        LOG.info("users {}", users);
+        if (listss.size() > 0) {
+          System.out.println(listss.get(0).get("id"));
+          user.setIamId(listss.get(0).get("id").toString());
+        }
+      } else if(res.getStatusCode().value() == 409) {
+        return ResponseEntity.status(409).body(new ResponseResult(409, "User with email " + user.getUsername() + " Already exist", null));
+      } else {
+        throw new Exception("System failed to create user in Security system.");
+      }
+      LOG.info("MY Principal before i proceed => {}", request.getUserPrincipal());
+      //LOG.info("MY NAME before i proceed => {}", request.getUserPrincipal().getName());
+
+      if (request.getUserPrincipal() != null){
+        LOG.info("Inside If");
+        User uO = getUserByHttpRequest(request);
+        if(uO != null) {
+          user.setUserUpdated(uO);
+          user.setUserCreated(uO);
+        }
+      }
 
       User u = userRepository.save(user);
       LOG.info("AppUser IAM {}, ID {}", u.getIamId(), u.getUserId());
@@ -250,7 +276,7 @@ public class UserService {
     return otp;
   }
 
-  /**public ResponseEntity resetPassword(ResetPassword ch) {
+  public ResponseEntity resetPassword(ResetPassword ch) {
     try{
       User user = userRepository.findByUsername(ch.getEmail());
       if(user == null) {
@@ -277,13 +303,13 @@ public class UserService {
       LOG.error("Change password {}", e.getMessage());
       return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
     }
-  }*/
+  }
 
   public User findByIam(String iamGuid) {
     return userRepository.findByIamId(iamGuid);
   }
 
-  /**public ResponseEntity changePassword(Authentication authentication, ResetPassword ch) {
+  public ResponseEntity changePassword(Authentication authentication, ResetPassword ch) {
     try{
       User user = userRepository.findByUsername(ch.getEmail());
       if(user == null) {
@@ -306,7 +332,7 @@ public class UserService {
       LOG.error("Change password {}", e.getMessage());
       return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
     }
-  }*/
+  }
 
 
 }

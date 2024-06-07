@@ -66,7 +66,7 @@ public class UserController {
     return userService.getOTP(email);
   }
 
-  /*@PostMapping("/reset-password")
+  @PostMapping("/reset-password")
   public ResponseEntity resetPassword(@RequestBody ResetPassword ch) {
     return userService.resetPassword(ch);
   }
@@ -76,7 +76,7 @@ public class UserController {
   public ResponseEntity changePassword(Authentication authentication, @RequestBody ResetPassword ch) {
     String correlationId = UUID.randomUUID().toString();
     return userService.changePassword(authentication, ch);
-  }*/
+  }
 
 
 }

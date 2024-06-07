@@ -30,7 +30,7 @@ import { SecurityEnum } from 'src/core/SecurityEnum';
 
 const ListAllBursaryApplications = () => {
     const [isLoading, setLoading] = useState(false);
-    const [facultyList, setFacultyList] = useState([]);
+    const [bursaryApplicationList, setBursaryApplicationList] = useState([]);
     const [role, setRole] = useState("");
     
     const [currentPage, setCurrentPage] = useState(1);
@@ -54,12 +54,12 @@ const ListAllBursaryApplications = () => {
     //Fetch regions from server
     const fetchData = async (currentPage_, searchText_) => {
         setLoading(true);
-        var url = `/api/v1/faculty?page=${currentPage_ - 1}&size=10&sort=facultyName&searchText=${searchText_}`
+        var url = `/api/v1/bursary-application?page=${currentPage_ - 1}&size=10&sort=enrolmentType&searchText=${searchText_}`
         console.log("My URL");
         console.log(url);
         const apiCall = await http.get(url);
         if (apiCall.code === 200) {
-            //setFacultyList(apiCall.data.content);
+            setBursaryApplicationList(apiCall.data.content);
             setLoading(false);
         } else {
             console.log('error occurred!!!', apiCall);
@@ -107,15 +107,15 @@ const ListAllBursaryApplications = () => {
                 </CCardHeader>
                     <CCardBody>
                         <div className='row mb-2'>
-                              <div className='col-8'>There are <strong>{facultyList.length}</strong> faculties in the system</div>
+                              <div className='col-8'>There are <strong>{bursaryApplicationList.length}</strong> faculties in the system</div>
                             <div className='col-4'>
                                 <CInputGroup>
                                     <CFormInput
                                         type="text"
-                                        placeholder="Search faculty"
+                                        placeholder="Search application"
                                         onChange={(e) => setSearchText(e.target.value)}
                                         value={searchText}
-                                        feedbackInvalid="Enter faculty name"
+                                        feedbackInvalid=""
                                     />
                                     <CButton type="button" color="secondary" variant="outline" onClick={handleClear}><FontAwesomeIcon icon={faTimes} /></CButton>
                                     <CButton type="button" color="secondary" variant="outline" onClick={handleSearch}><FontAwesomeIcon icon={faSearch} /></CButton>
@@ -138,7 +138,7 @@ const ListAllBursaryApplications = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                              facultyList.map((x, i) =>
+                                              bursaryApplicationList.map((x, i) =>
                                                 <tr key={i}>
                                                     <td>{i + 1}</td>
                                                     <td>{x?.facultyName}</td>
