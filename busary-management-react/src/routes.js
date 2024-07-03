@@ -60,6 +60,7 @@ const ListAllDepartments = React.lazy(() => import('./views/administration/depar
 const ListAllFaculties = React.lazy(() => import('./views/administration/faculty/ListAllFaculties'));
 const ListAllQualifications = React.lazy(() => import('./views/settings/qualification/ListAllQualification'));
 const ListAllBursaryApplications = React.lazy(() => import('./views/bursary-applications/ListAllBursaryApplications'));
+const ListAllUsers = React.lazy(() => import('./views/administration/users/ListAllUsers'));
 
 // Plugins
 const Calendar = React.lazy(() => import('./views/plugins/calendar/Calendar'))
@@ -77,7 +78,7 @@ const routes = [
   { path: '/list-faculties', name: 'ListAllFaculties', element: ListAllFaculties},
   { path: '/list-qualifications', name: 'ListAllQuafications', element: ListAllQualifications },
   { path: '/list-bursary-applications', name: 'ListAllBursaryApplications', element: ListAllBursaryApplications},
-
+  { path: '/list-users', name: 'ListAllusers', element: ListAllUsers},
 
 
 

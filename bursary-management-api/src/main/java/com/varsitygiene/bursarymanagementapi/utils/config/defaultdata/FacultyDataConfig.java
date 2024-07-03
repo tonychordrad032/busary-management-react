@@ -14,17 +14,17 @@ public class FacultyDataConfig {
 
   private FacultyRepository facultyRepository;
 
-  @Bean
-  public CommandLineRunner loadFaculties(FacultyRepository facultyRepository) {
-    return (args) -> {
-      load(new Faculty("Faculty of Accounting and Informatics"));
-      load(new Faculty("Faculty of Applied Sciences"));
-      load(new Faculty("Faculty of Arts and Design"));
-      load(new Faculty("Faculty of Engineering and the Built Environment"));
-      load(new Faculty("Faculty of Health Sciences"));
-      load(new Faculty("Faculty of Management Sciences"));
-    };
-  }
+//  @Bean
+//  public CommandLineRunner loadFaculties(FacultyRepository facultyRepository) {
+//    return (args) -> {
+//      load(new Faculty("Faculty of Accounting and Informatics"));
+//      load(new Faculty("Faculty of Applied Sciences"));
+//      load(new Faculty("Faculty of Arts and Design"));
+//      load(new Faculty("Faculty of Engineering and the Built Environment"));
+//      load(new Faculty("Faculty of Health Sciences"));
+//      load(new Faculty("Faculty of Management Sciences"));
+//    };
+//  }
 
   public void load(Faculty faculty) {
     if (!facultyRepository.existsByFacultyName(faculty.getFacultyName())) {

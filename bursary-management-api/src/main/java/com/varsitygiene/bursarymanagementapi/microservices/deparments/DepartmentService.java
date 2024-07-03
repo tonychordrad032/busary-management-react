@@ -2,13 +2,20 @@ package com.varsitygiene.bursarymanagementapi.microservices.deparments;
 
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
+import com.varsitygiene.bursarymanagementapi.microservices.users.User;
+import com.varsitygiene.bursarymanagementapi.microservices.users.UserService;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Log4j2
@@ -19,6 +26,8 @@ public class DepartmentService {
 
     private HistoryService historyService;
 
+    private UserService userService;
+
     /**
      * Create new department
      * @param department
@@ -26,7 +35,7 @@ public class DepartmentService {
     //* @param authentication
      * @return
      */
-    public ResponseEntity save(Department department, String correlationId) {
+    public ResponseEntity save(Department department, String correlationId, Authentication authentication) {
         try{
             log.info("cid=>{} start with create department function. Object => {}", correlationId, department.toString());
 
@@ -37,12 +46,11 @@ public class DepartmentService {
                 return ResponseEntity.status(409).body(new ResponseResult(409, department.getDepartmentName() + " Already exists", department));
             }
 
-            /*AppUser a = appUserService.getUserByAuthJWT(authentication);
+            User a = userService.getUserByAuthJWT(authentication);
             if(a != null) {
-                region.setSourceCompany(a.getSourceCompany());
-                region.setUserCreated(a);
-                region.setUserUpdated(a);
-            }*/
+                department.setUserCreated(a);
+                department.setUserUpdated(a);
+            }
             departmentRepository.save(department);
 
 
@@ -122,6 +130,18 @@ public class DepartmentService {
             return ResponseEntity.badRequest().body(new ResponseResult(500,e.getMessage(), null));
         }finally {
             log.info("cid=>{} finish with delete department function.", correlationId);
+        }
+    }
+
+    /**
+     * Return all department by facultyId
+     * @return
+     */
+    public List<Department> listAllDepartmentByFacultyId(long facultyId) {
+        try {
+            return departmentRepository.findDepartmentByFacultyId(facultyId);
+        }catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 }

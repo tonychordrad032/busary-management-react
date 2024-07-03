@@ -60,7 +60,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Users',
-        to: '/buttons/dropdowns',
+        to: '/list-users',
       },
       // {
       //   component: CNavItem,

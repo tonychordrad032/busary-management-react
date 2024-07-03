@@ -31,10 +31,12 @@ public class History extends Base {
   private String description;
 
 
+
+
   public History() {}
 
   public History(String activity, String functionMethod, String dataBefore, String dataAfter, User user) {
-    super(user);
+    //super(user);
     this.activity = activity;
     this.functionMethod = functionMethod;
     this.dataBefore = dataBefore;

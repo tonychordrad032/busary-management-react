@@ -6,6 +6,8 @@ import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryServic
 import com.varsitygiene.bursarymanagementapi.utils.config.utils.EmailSender;
 import com.varsitygiene.bursarymanagementapi.utils.dto.ResetPassword;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +25,24 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class UserService {
 
+  @Autowired
   private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
   @Autowired
   private UserRepository userRepository;
 
+
   @Autowired
   private AppAuth appAuth;
 
+
   @Autowired
   EmailSender emailSender;
+
 
   @Autowired
   @Lazy
@@ -54,13 +61,13 @@ public class UserService {
 
   public ResponseEntity<Page<User>> listAllPageable(Pageable pageable, String searchText, HttpServletRequest request) throws Exception {
     User user = getUserByHttpRequest(request);
-    //LOG.info("getSourceCompanyId => {}", appUser.getSourceCompany().getSourceCompanyId());
 
     if("Administrator".equalsIgnoreCase(user.getUserType())) {
       LOG.info("Listing users for admin -> {}", user.getUsername());
+      LOG.info("My List of all users => {}", userRepository.findAllBySearchAdmin(pageable, searchText).toList().size());
       return ResponseEntity.ok().body(userRepository.findAllBySearchAdmin(pageable, searchText));
     }else{
-      return ResponseEntity.ok().body(userRepository.findAllBySearch(pageable, searchText));
+      return ResponseEntity.ok().body(userRepository.findAllBySearch(pageable, user.getUserId()));
     }
   }
 
@@ -116,16 +123,16 @@ public class UserService {
         LOG.info("Inside If");
         User uO = getUserByHttpRequest(request);
         if(uO != null) {
-          user.setUserUpdated(uO);
           user.setUserCreated(uO);
+          user.setUserUpdated(uO);
         }
       }
 
       User u = userRepository.save(user);
       LOG.info("AppUser IAM {}, ID {}", u.getIamId(), u.getUserId());
-      historyService.record(new History("new user", "save", "", u.toString(), u));
+      historyService.record(new History("new user", "save", "", "", u));
       LOG.info("After history");
-      emailSender.sendEmail(user.getUsername(), "Registration successful", "Hi " + user.getFirstName() +"\n\nWelcome to Lepro, enjoy!.\n\nRegards,\nlepro Team!");
+      //emailSender.sendEmail(user.getUsername(), "Registration successful", "Hi " + user.getFirstName() +"\n\nWelcome to dut, enjoy!.\n\nRegards,\nFai Team!");
       LOG.info("After email");
       return ResponseEntity.created(null).body(new ResponseResult(201, "User created successfully", u));
     }catch (Exception e) {
@@ -146,6 +153,7 @@ public class UserService {
   }
 
   public User getUserByHttpRequest(HttpServletRequest request) throws Exception {
+    LOG.info("Start getting User by HttpRequest");
     String principal = request.getUserPrincipal() == null ? null : request.getUserPrincipal().getName();
     User user = userRepository.findByIamId(principal);
 
@@ -170,26 +178,26 @@ public class UserService {
 
       LOG.info("MY USER ID => {}", user.getUserId());
 
-      User _User = userRepository.findById(user.getUserId()).orElseThrow(() -> new RuntimeException("User Not found"));
+      User _user = userRepository.findById(user.getUserId()).orElseThrow(() -> new RuntimeException("User Not found"));
 
 
-      //AppUser userUpdating = getUserByAuthJWT(authentication);
+      User userUpdating = getUserByAuthJWT(authentication);
 
-      //_appUser.setUserUpdated(userUpdating);
-      _User.setFirstName(user.getFirstName());
-      _User.setLastName(user.getLastName());
-      _User.setMobile(user.getMobile());
-      _User.setUserType(user.getUserType());
-      _User.setGender(user.getGender());
-      _User.setIdentityNumber(user.getIdentityNumber());
-      _User.setPassportNumber(user.getPassportNumber());
-      _User.setStudentNumber(user.getStudentNumber());
+      _user.setUserUpdated(userUpdating);
+      _user.setFirstName(user.getFirstName());
+      _user.setLastName(user.getLastName());
+      _user.setMobile(user.getMobile());
+      _user.setUserType(user.getUserType());
+      _user.setGender(user.getGender());
+      _user.setIdentityNumber(user.getIdentityNumber());
+      _user.setPassportNumber(user.getPassportNumber());
+      _user.setStudentNumber(user.getStudentNumber());
 
-      userRepository.save(_User);
+      userRepository.save(_user);
       userRepository.flush();
       LOG.info("{} : User was successfully updated", correlationId);
 
-      return ResponseEntity.ok().body(new ResponseResult(200, "User was updated successfully", _User));
+      return ResponseEntity.ok().body(new ResponseResult(200, "User was updated successfully", _user));
     }catch (Exception e){
       LOG.error("{} : Error while updating user", correlationId);
       return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));

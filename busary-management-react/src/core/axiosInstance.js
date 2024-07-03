@@ -5,12 +5,10 @@ import { SecurityEnum } from './SecurityEnum';
 export default (history = null) => {
   const baseURL = process.env.REACT_APP_BACKEND_URL;
 
-  //var TOKEN = 'opti_access_token';
 
   let headers = {};
 
-  if (localStorage.lepro_v2_access_token) {
-    //console.log('TOKEN', localStorage.getItem('asset_opti_v3_access_token'));
+  if (localStorage.dut_management_access_token) {
     headers.Authorization = `Bearer ${localStorage.getItem(SecurityEnum.AccessToken)}`;
   }
 

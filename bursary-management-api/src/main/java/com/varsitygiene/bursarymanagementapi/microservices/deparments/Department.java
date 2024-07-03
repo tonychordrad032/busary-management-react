@@ -2,6 +2,7 @@ package com.varsitygiene.bursarymanagementapi.microservices.deparments;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.varsitygiene.bursarymanagementapi.microservices.faculty.Faculty;
+import com.varsitygiene.bursarymanagementapi.microservices.users.User;
 import com.varsitygiene.bursarymanagementapi.utils.dto.Base;
 import lombok.Data;
 
@@ -22,6 +23,11 @@ public class Department extends Base {
 
     @ManyToOne
     private Faculty faculty;
+
+    @ManyToOne
+    private User userCreated;
+    @ManyToOne
+    private User userUpdated;
 
     public Department(){}
 

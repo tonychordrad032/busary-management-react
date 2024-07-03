@@ -70,6 +70,7 @@ const Login = () => {
 
     //console.log('userName', username);
     //console.log('password', password);
+    console.log("Start logging in")
     localStorage.clear();
 
     var data = {

@@ -2,9 +2,12 @@ package com.varsitygiene.bursarymanagementapi.microservices.fundingstatus;
 
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.UUID;
 
 @RestController
@@ -23,8 +26,9 @@ public class FundingStatusController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseResult> listAll(){
-        return ResponseEntity.ok().body(new ResponseResult(200, "List of funding status", fundingStatusRepository.findAll()));
+    @RolesAllowed({"admin", "user"})
+    public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText){
+        return fundingStatusService.listAllPageAble(pageable, searchText);
     }
 
     @PutMapping

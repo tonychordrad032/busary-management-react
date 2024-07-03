@@ -31,7 +31,7 @@ public class DepartmentDataConfig {
 
   public void load(Department department) {
     if (!departmentRepository.existsByDepartmentName(department.getDepartmentName())) {
-      department.setFaculty(new Faculty(1,"", null, null));
+      //department.setFaculty(new Faculty(1,"", null));
       departmentRepository.save(department);
       log.info("{} added successfully", department);
     }

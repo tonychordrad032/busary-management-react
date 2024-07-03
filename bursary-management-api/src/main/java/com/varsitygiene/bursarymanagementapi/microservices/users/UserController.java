@@ -2,6 +2,7 @@ package com.varsitygiene.bursarymanagementapi.microservices.users;
 
 import com.varsitygiene.bursarymanagementapi.utils.dto.ResetPassword;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
+import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -27,8 +30,14 @@ public class UserController {
 
   @GetMapping
   @RolesAllowed({"admin", "user"})
-  public ResponseEntity listAll(HttpServletRequest request, Pageable pageable, @RequestParam String searchText) throws Exception {
+  public ResponseEntity listAllPageable(Pageable pageable, @RequestParam String searchText, HttpServletRequest request) throws Exception {
     return userService.listAllPageable(pageable, searchText, request);
+  }
+
+  @GetMapping("/list")
+  @RolesAllowed({"admin", "user"})
+  public List<User> list() throws Exception {
+    return userService.listAll();
   }
 
   @PostMapping

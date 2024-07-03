@@ -20,22 +20,11 @@ public class Base {
   private long updateVersion = 0;
 
 
-  @ManyToOne
-  private User userCreated;
-
-  @ManyToOne
-  private User userUpdated;
-
 
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime dateAdded, dateUpdated, appCaptureDate, syncDate;
 
   public Base() {}
-
-  public Base(User userCreated) {
-    this.userCreated = userCreated;
-  }
-
   /**
    * This method is auto called on create Object by JPA before is saves the object
    */

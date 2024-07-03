@@ -15,13 +15,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
   List<User> findByMobile(String mobile);
 
   //Admin
-  @Query("FROM tbl_users b WHERE b.deleted = 0 AND (b.firstName LIKE %:searchText% OR b.lastName LIKE %:searchText% OR b.username LIKE %:searchText% OR b.mobile LIKE %:searchText%)")
+  @Query("FROM tbl_users b WHERE b.deleted = 0 AND (b.firstName LIKE %:searchText% OR b.lastName LIKE %:searchText% OR b.mobile LIKE %:searchText%)")
   Page<User> findAllBySearchAdmin(Pageable pageable, String searchText);
 
   //Other
-  @Query("FROM tbl_users b WHERE b.deleted = 0 AND (b.firstName LIKE %:searchText% OR b.lastName LIKE %:searchText% OR b.username LIKE %:searchText% OR b.mobile LIKE %:searchText%)")
-  Page<User> findAllBySearch(Pageable pageable, String searchText);
-
+  @Query("FROM tbl_users b WHERE b.deleted = 0 AND (b.userId = :userId)")
+  Page<User> findAllBySearch(Pageable pageable, long userId);
 
   User findByIamId(String iamId);
   User findByUsername(String username);

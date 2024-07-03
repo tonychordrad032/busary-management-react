@@ -1,6 +1,8 @@
 package com.varsitygiene.bursarymanagementapi.microservices.faculty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.varsitygiene.bursarymanagementapi.microservices.users.User;
 import com.varsitygiene.bursarymanagementapi.utils.dto.Base;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +29,14 @@ public class Faculty extends Base {
     public Faculty(String facultyName) {
         this.facultyName = facultyName;
     }
+
+    @ManyToOne
+    //@JsonIgnore
+    private User userCreated;
+
+    @ManyToOne
+    //@JsonIgnore
+    private User userUpdated;
 
     @PrePersist
     private void onCreate()
