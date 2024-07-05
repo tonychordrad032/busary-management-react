@@ -54,6 +54,7 @@ const Modals = React.lazy(() => import('./views/notifications/modals/Modals'))
 const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const SmartTable = React.lazy(() => import('./views/smart-table/SmartTable'))
+const SmartTableDownloadableExample = React.lazy(() => import('./views/smart-table/SmartTableDownloadableExample'))
 
 // Administration
 const ListAllDepartments = React.lazy(() => import('./views/administration/departments/ListAllDepartments'));
@@ -139,6 +140,7 @@ const routes = [
   { path: '/plugins/charts', name: 'Charts', element: Charts },
   { path: '/plugins/google-maps', name: 'GoogleMaps', element: GoogleMaps },
   { path: '/smart-table', name: 'Smart Table', element: SmartTable },
+  { path: '/busary-list', name: 'Smart Table Downloadable', element: SmartTableDownloadableExample },
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/apps', name: 'Apps', element: Invoice, exact: true },
   { path: '/apps/invoicing', name: 'Invoice', element: Invoice, exact: true },

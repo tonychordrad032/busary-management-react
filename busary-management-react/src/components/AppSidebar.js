@@ -36,6 +36,7 @@ const AppSidebar = () => {
 
   return (
     <CSidebar
+      //colorScheme='light'
       position="fixed"
       unfoldable={unfoldable}
       visible={sidebarShow}
@@ -44,7 +45,7 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-none d-md-flex" to="/" color={'white'}>
-        <CImage src={dutlogo} width={150} />
+        <CImage src={dutlogo} width={170} />
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>

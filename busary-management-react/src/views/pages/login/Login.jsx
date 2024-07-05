@@ -33,6 +33,7 @@ const Login = () => {
   const [visible, setVisible] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState('');
   const recaptcha = useRef()
   const [env, setEnv] = useState('')
   const [baseURL, setBaseURL] = useState('')
@@ -67,11 +68,9 @@ const Login = () => {
 
 
   const handleSave = async () => {
-
-    //console.log('userName', username);
-    //console.log('password', password);
     console.log("Start logging in")
     localStorage.clear();
+    setRole("");
 
     var data = {
       "username": username,
@@ -90,11 +89,24 @@ const Login = () => {
 
         var userInfoRes = await http.get('/api/v1/user/profile');
         await localStorage.setItem(SecurityEnum.UserProfile, JSON.stringify(userInfoRes.data.results));
+        console.log("My login user");
+        console.log(userInfoRes.data.results?.userType);
+        console.log(userInfoRes.data.results);
+        //var userProfile = JSON.parse(await localStorage.getItem(SecurityEnum.UserProfile));
+        setRole(userInfoRes.data.results?.userType);
+        console.log("My ROLE");
+        console.log(role);
         setLoading(false);
-
-        //console.log(userInfoRes);
-        navigate('/dashboard');
+        if (userInfoRes.data.results?.userType === "Administrator") {
+          console.log("IF PART");
+          navigate('/dashboard');
+        }else{
+          console.log("ELSE PART");
+          navigate('/list-bursary-applications');
+        }
+          
         
+
       }else{
         toast.error('Error occurred', Toast.getToastOptions());
         setLoading(false);

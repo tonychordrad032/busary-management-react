@@ -66,7 +66,7 @@ const AppHeader = () => {
     }, []);
 
   return (
-    <CHeader position="sticky" className="mb-4">
+    <CHeader color='dark' position="sticky" className="mb-4">
       <CContainer fluid>
         
         <CHeaderToggler
