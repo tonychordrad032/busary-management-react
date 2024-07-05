@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CAvatar,
@@ -33,6 +33,7 @@ import avatar5 from './../assets/images/avatars/5.jpg'
 import avatar6 from './../assets/images/avatars/6.jpg'
 import avatar7 from './../assets/images/avatars/7.jpg'
 import avatar8 from './../assets/images/avatars/8.jpg'
+import { SecurityEnum } from 'src/core/SecurityEnum';
 
 const AppAside = () => {
   const dispatch = useDispatch()
@@ -40,8 +41,32 @@ const AppAside = () => {
 
   const [activeKey, setActiveKey] = useState(1)
 
+  const [fullName, setFullName] = useState("");
+  const [company, setCompany] = useState("");
+  const [region, setRegion] = useState("");
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [baseURL, setBaseURL] = useState("");
+  const [env, setEnv] = useState("");
+
+
+  const userProfile = async () => {
+      var userProfile = JSON.parse(await localStorage.getItem(SecurityEnum.UserProfile));
+      setFullName(userProfile?.firstName + " " + userProfile?.lastName);
+      setCompany(userProfile?.sourceCompany?.sourceCompanyName);
+      setRegion(userProfile?.region?.regionName);
+      setEmail(userProfile?.username);
+      setRole(userProfile?.userType);
+  };
+
+  useEffect(() => {
+    userProfile();
+  }, []);
+
   return (
     <CSidebar
+      role = {role}
       colorScheme="light"
       size="lg"
       overlaid

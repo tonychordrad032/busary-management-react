@@ -96,13 +96,8 @@ const FacultyModal = (props) => {
 
     //Handle Save
     const handleSubmit = async (event) => {
-        const form = event.currentTarget
-        if (form.checkValidity() === false){
-            event.preventDefault()
-            event.stopPropagation()
-            return;
-        }
-        setValidated(true)
+        handleSave();
+        setValidated(true);
     };
 
     const clearForm = () => {
@@ -166,12 +161,12 @@ const FacultyModal = (props) => {
                   </CButton>
                   {
                       (props.role == 'Administrator') &&
-                        <CButton type='submit' className={deleteObj ? 'd-none' : ''} color="primary" onClick={() => { setValidated(true); handleSave(); }}>Save changes</CButton>
+                        <CButton type='submit' className={deleteObj ? 'd-none' : ''} color="primary" onClick={() => {handleSubmit(); }}>Save changes</CButton>
                   }
 
                   {
                       (props.role == 'Administrator') &&
-                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete</CButton>
+                        <CButton type='submit' className={deleteObj ? '' : 'd-none'} color="danger" onClick={() => { handleSubmit(); }}>Delete</CButton>
                   }
               </CModalFooter>
           </CModal>

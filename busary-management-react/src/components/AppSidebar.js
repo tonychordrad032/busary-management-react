@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler, CImage } from '@coreui/react-pro'
@@ -11,14 +11,28 @@ import { sygnet } from 'src/assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
+import { SecurityEnum } from 'src/core/SecurityEnum';
 
 // sidebar nav config
 import navigation from '../_nav'
+import navigation_to_student from '../_nav_student'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+
+  const [role, setRole] = useState("");
+
+
+  const userProfile = async () => {
+      var userProfile = JSON.parse(await localStorage.getItem(SecurityEnum.UserProfile));
+      setRole(userProfile?.userType);
+  };
+
+  useEffect(() => {
+    userProfile();
+  }, []);
 
   return (
     <CSidebar
@@ -34,7 +48,7 @@ const AppSidebar = () => {
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav items={role === "Administrator" ? navigation : navigation_to_student} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

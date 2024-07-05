@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -14,6 +14,7 @@ import {
   CNavItem,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
+import { SecurityEnum } from 'src/core/SecurityEnum'
 import { cilApplicationsSettings, cilMenu, cilMoon, cilSun } from '@coreui/icons'
 
 import { AppBreadcrumb } from './index'
@@ -38,29 +39,52 @@ const AppHeader = () => {
     ? document.body.classList.add('dark-theme')
     : document.body.classList.remove('dark-theme')
 
-  const sidebarShow = useSelector((state) => state.sidebarShow)
-  const asideShow = useSelector((state) => state.asideShow)
+  var sidebarShow = useSelector((state) => state.sidebarShow)
+  const [alreadyOpen, setOpen] = useState(false);
+
+  const [fullName, setFullName] = useState("");
+  const [company, setCompany] = useState("");
+  const [region, setRegion] = useState("");
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [baseURL, setBaseURL] = useState("");
+  const [env, setEnv] = useState("");
+
+
+  const userProfile = async () => {
+      var userProfile = JSON.parse(await localStorage.getItem(SecurityEnum.UserProfile));
+      setFullName(userProfile?.firstName + " " + userProfile?.lastName);
+      setCompany(userProfile?.sourceCompany?.sourceCompanyName);
+      setRegion(userProfile?.region?.regionName);
+      setEmail(userProfile?.username);
+      setRole(userProfile?.userType);
+  };
+
+  useEffect(() => {
+    userProfile();
+    }, []);
 
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
+        
         <CHeaderToggler
           className="ps-1"
           onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
+      
+        
         <CHeaderBrand className="mx-auto d-md-none" to="/">
           {/*<CIcon icon={logo} height={48} alt="Logo" />*/}
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink}>
-              Dashboard
-            </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
+            <CNavLink href="#">Profile</CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink href="#">Settings</CNavLink>
@@ -98,12 +122,6 @@ const AppHeader = () => {
         <CHeaderNav className="ms-3 me-4">
           <AppHeaderDropdown />
         </CHeaderNav>
-        <CHeaderToggler
-          className="px-md-0 me-md-3"
-          onClick={() => dispatch({ type: 'set', asideShow: !asideShow })}
-        >
-          <CIcon icon={cilApplicationsSettings} size="lg" />
-        </CHeaderToggler>
       </CContainer>
       <CHeaderDivider />
       <CContainer fluid>

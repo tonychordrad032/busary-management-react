@@ -90,7 +90,7 @@ const UpdateUserModal = (props) => {
 
   //loads only when the component is loadedd
   useEffect(() => {
-    fetchDepartmentData(props.data.department?.faculty?.facultyId);
+    //fetchDepartmentData(props.data.department?.faculty?.facultyId);
     if(props.action === 'update') {
         setUserId(props.data.userId);
         setFirstName(props.data.firstName);
@@ -105,7 +105,7 @@ const UpdateUserModal = (props) => {
         setDob(props.data?.dob);
         setEmployeeNumber(props.data.employeeNumber);
     }
-    fetchDepartmentData(props.data.department?.faculty?.facultyId);
+    ///fetchDepartmentData(props.data.department?.faculty?.facultyId);
   }, [props.data]);
 
   const handleSubmit = (event) => {

@@ -153,6 +153,9 @@ const Login = () => {
                     <CCol xs={6} className="text-right">
                       <Link to="/forgot-password">Forgot password?</Link>
                     </CCol>
+                    <CCol xs={6}>
+                      <Link to="/register">Sign Up</Link>
+                    </CCol>
                   </CRow>
                 
                   <CRow className="mt-3">

@@ -30,6 +30,7 @@ import LoadSpinner from 'src/components/LoadSpinner';
 
 const UserModal = (props) => {
     const [isLoading, setLoading] = useState(false);
+    const [toggle, setToggle] = useState(false);
 
     const [visible, setVisible] = useState(false);
     const [validated, setValidated] = useState(false)
@@ -51,6 +52,7 @@ const UserModal = (props) => {
     const [dob, setDob] = useState(new Date());
     const [studentNumber, setStudentNumber] = useState('');
     const [race, setRace] = useState('');
+    const [identityNumber, setIdentityNumber] = useState('');
 
     const http = new HttpFunction();
 
@@ -155,21 +157,16 @@ const UserModal = (props) => {
     }
   }
 
-    //Handle Save
-    const handleSubmit = async (event) => {
-        const form = event.currentTarget
-        if (form.checkValidity() === false){
-            event.preventDefault()
-            event.stopPropagation()
-            return;
-        }
-        setValidated(true)
-    };
+  //Handle Save
+  const handleSubmit = async (event) => {
+      setValidated(true)
+      handleSave();
+  };
 
-    const clearForm = () => {
-        setUserId('');
-        setFirstName('');
-    }
+  const clearForm = () => {
+      setUserId('');
+      setFirstName('');
+  }
 
 
 

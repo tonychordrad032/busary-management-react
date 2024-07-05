@@ -1,5 +1,5 @@
 import { element } from 'prop-types'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import ListDepartments from './views/administration/departments/ListAllDepartments'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -62,6 +62,9 @@ const ListAllQualifications = React.lazy(() => import('./views/settings/qualific
 const ListAllBursaryApplications = React.lazy(() => import('./views/bursary-applications/ListAllBursaryApplications'));
 const ListAllUsers = React.lazy(() => import('./views/administration/users/ListAllUsers'));
 
+const Register = React.lazy(() => import('./views/pages/register/Register'))
+const RegisterAccount = React.lazy(() => import('./views/pages/register/RegisterAccount'))
+
 // Plugins
 const Calendar = React.lazy(() => import('./views/plugins/calendar/Calendar'))
 const Charts = React.lazy(() => import('./views/plugins/charts/Charts'))
@@ -79,6 +82,8 @@ const routes = [
   { path: '/list-qualifications', name: 'ListAllQuafications', element: ListAllQualifications },
   { path: '/list-bursary-applications', name: 'ListAllBursaryApplications', element: ListAllBursaryApplications},
   { path: '/list-users', name: 'ListAllusers', element: ListAllUsers},
+  { path: '/register', name: 'Register', element: Register},
+  { path: '/register-account', name: 'RegisterAccount', element: RegisterAccount},
 
 
 

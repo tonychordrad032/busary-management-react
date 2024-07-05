@@ -93,17 +93,17 @@ const http = new HttpFunction();
 
 // Fetch history from server
 const fetchHistoryData = async () => {
-  var url = `/api/v1/history?page=0&size=10&sort=historyId,DESC&searchText=`;
+  // var url = `/api/v1/history?page=0&size=10&sort=historyId,DESC&searchText=`;
       
-        const apiCall = await http.get(url);
+  //       const apiCall = await http.get(url);
        
-        if(apiCall.code === 200) {
-          setHistory(apiCall.data.content);        
-        }else if(apiCall === 204){
-          toast.error('error occurred!!!', Toast.getToastOptions());
-        }else{
-          toast.error('error occurred!!!', Toast.getToastOptions());
-        }
+  //       if(apiCall.code === 200) {
+  //         setHistory(apiCall.data.content);        
+  //       }else if(apiCall === 204){
+  //         toast.error('error occurred!!!', Toast.getToastOptions());
+  //       }else{
+  //         toast.error('error occurred!!!', Toast.getToastOptions());
+  //       }
 }
 
 

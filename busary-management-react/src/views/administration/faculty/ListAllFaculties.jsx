@@ -54,7 +54,7 @@ const ListAllFaculties = () => {
     //Fetch regions from server
     const fetchData = async (currentPage_, searchText_) => {
         setLoading(true);
-        var url = `/api/v1/faculty?page=${currentPage_ - 1}&size=10&sort=facultyName&searchText=${searchText_}`
+        var url = `/api/v1/faculty?page=${currentPage_ - 1}&size=10&sort=facultyId&searchText=${searchText_}`
         console.log("My URL");
         console.log(url);
         const apiCall = await http.get(url);
