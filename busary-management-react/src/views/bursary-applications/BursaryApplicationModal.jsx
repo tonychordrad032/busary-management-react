@@ -113,10 +113,10 @@ const BursaryApplicationModal = (props) => {
     const http = new HttpFunction();
 
     // Initialize form field, on modal load
-    const InitializeFormFields = (facultyObj) => {
+    const InitializeFormFields = (bursaryObj) => {
         setLoading(true);
-        //setFacultyId(facultyObj?.facultyId);
-        //setFacultyName(facultyObj?.facultyName ?? '');
+        setFirstName(bursaryObj?.applicant?.firstName);
+        setLastName(bursaryObj?.applicant?.lastName);
         setLoading(false);
     }
 

@@ -87,5 +87,11 @@ public class UserController {
     return userService.changePassword(authentication, ch);
   }
 
+  @PostMapping("/register-user")
+  public ResponseEntity registerUser(@RequestBody User user, HttpServletRequest request) {
+    String correlationId = UUID.randomUUID().toString();
+    return userService.registerUser(user, correlationId, request);
+  }
+
 
 }

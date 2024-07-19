@@ -1,5 +1,8 @@
 package com.varsitygiene.bursarymanagementapi.microservices.users;
 
+import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplication;
+import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplicationRepository;
+import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplicationService;
 import com.varsitygiene.bursarymanagementapi.microservices.auth.AppAuth;
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
@@ -34,6 +37,9 @@ public class UserService {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private BursaryApplicationRepository bursaryApplicationRepository;
 
 
   @Autowired
@@ -338,6 +344,86 @@ public class UserService {
       return ResponseEntity.ok().body(new ResponseResult(200, "Password changed successfully.", null));
     }catch (Exception e) {
       LOG.error("Change password {}", e.getMessage());
+      return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
+    }
+  }
+
+  /**
+   * Register user to the database
+   * @param user
+   * @return
+   */
+  public ResponseEntity registerUser(User user, String correlationId, HttpServletRequest request) {
+    try {
+      LOG.info("start saving user {}", user.toString());
+
+      if (user == null || user.getUsername().equals("")) {
+        LOG.warn("{} : no content", correlationId);
+        return ResponseEntity.noContent().build();
+      }
+
+      if (userRepository.findByEmail(user.getUsername()).size() > 0) {
+        LOG.warn("{} : User with email " + user.getUsername() + " already exist");
+        return ResponseEntity.status(409).body(new ResponseResult(409, "User with email " + user.getUsername() + " Already exist", null));
+      }
+
+      if (userRepository.findByMobile(user.getMobile()).size() > 0) {
+        LOG.warn("{} : User with mobile " + user.getMobile() + " already exist");
+        return ResponseEntity.status(409).body(new ResponseResult(409, "User with mobile " + user.getMobile() + " Already exist", null));
+      }
+
+      //Calling keycloak service
+      ResponseEntity<Map> res = appAuth.createAppUser(user);
+      LOG.info("ToString -> " + res.toString());
+      LOG.info("Code Status -> " + res.getStatusCode().toString());
+      LOG.info("Body -> " + res.getBody());
+
+      if (res.getStatusCode().value() == 201) {
+        LOG.info("In 201");
+        ResponseEntity<List> users = appAuth.getUser(user.getUsername());
+        LOG.info("users {}", users);
+        List<Map<String, Object>> listss = users.getBody();
+        LOG.info("users {}", users);
+        if (listss.size() > 0) {
+          System.out.println(listss.get(0).get("id"));
+          user.setIamId(listss.get(0).get("id").toString());
+        }
+      } else if(res.getStatusCode().value() == 409) {
+        return ResponseEntity.status(409).body(new ResponseResult(409, "User with email " + user.getUsername() + " Already exist", null));
+      } else {
+        throw new Exception("System failed to create user in Security system.");
+      }
+      LOG.info("MY Principal before i proceed => {}", request.getUserPrincipal());
+      //LOG.info("MY NAME before i proceed => {}", request.getUserPrincipal().getName());
+
+      if (request.getUserPrincipal() != null){
+        LOG.info("Inside If");
+        User uO = getUserByHttpRequest(request);
+        if(uO != null) {
+          user.setUserCreated(uO);
+          user.setUserUpdated(uO);
+        }
+      }
+
+      User u = userRepository.save(user);
+      LOG.info("AppUser IAM {}, ID {}", u.getIamId(), u.getUserId());
+      historyService.record(new History("new user", "save", "", "", u));
+      LOG.info("After history");
+
+      LOG.info("Start Creating Application for user : {}", u.getFirstName());
+      BursaryApplication application = new BursaryApplication();
+      application.setApplicant(u);
+      application.setStudentNumber(u.getIdentityNumber());
+      bursaryApplicationRepository.save(application);
+
+      LOG.info("Finish Creating Application for user : {}", u.getFirstName());
+
+      //emailSender.sendEmail(user.getUsername(), "Registration successful", "Hi " + user.getFirstName() +"\n\nWelcome to dut, enjoy!.\n\nRegards,\nFai Team!");
+      LOG.info("After email");
+      return ResponseEntity.created(null).body(new ResponseResult(201, "Registration was successfully", u));
+      //return ResponseEntity.created(null).body(new ResponseResult(201, "User created successfully", null));
+    }catch (Exception e) {
+      LOG.error(e.getMessage());
       return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
     }
   }

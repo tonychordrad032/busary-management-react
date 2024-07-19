@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @Log4j2
@@ -22,7 +23,7 @@ public class BursaryApplicationController {
     }
 
     @GetMapping()
-    public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText) {
-        return  bursaryApplicationService.listAllPageAble(pageable, searchText);
+    public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText, HttpServletRequest request) {
+        return  bursaryApplicationService.listAllPageAble(pageable, searchText, request);
     }
 }

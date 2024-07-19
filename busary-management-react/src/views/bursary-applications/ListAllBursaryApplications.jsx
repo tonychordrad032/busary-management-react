@@ -54,7 +54,7 @@ const ListAllBursaryApplications = () => {
     //Fetch regions from server
     const fetchData = async (currentPage_, searchText_) => {
         setLoading(true);
-        var url = `/api/v1/bursary-application?page=${currentPage_ - 1}&size=10&sort=enrolmentType&searchText=${searchText_}`
+        var url = `/api/v1/bursary-application?page=${currentPage_ - 1}&size=10&sort=studentNumber&searchText=${searchText_}`
         console.log("My URL");
         console.log(url);
         const apiCall = await http.get(url);
@@ -141,7 +141,10 @@ const ListAllBursaryApplications = () => {
                                               bursaryApplicationList.map((x, i) =>
                                                 <tr key={i}>
                                                     <td>{i + 1}</td>
-                                                    <td>{x?.facultyName}</td>
+                                                    <td>{x?.applicant?.firstName}</td>
+                                                    <td>{x?.applicant?.lastName}</td>
+                                                    <td>{x?.fundingStatus}</td>
+                                                    <td>{x?.fundingType}</td>
                                                     <td>{x?.dateAdded}</td>
                                                     <td className='text-end'>
                                                         <BursaryApplicationModal 

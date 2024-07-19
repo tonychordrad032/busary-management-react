@@ -8,5 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BursaryApplicationRepository extends JpaRepository<BursaryApplication, Long> {
     @Query("FROM tbl_bursary_applications b WHERE b.deleted = 0 AND (b.enrolmentType LIKE %:searchText%)")
-    Page<BursaryApplication> findAllBySearch(Pageable pageable, String searchText);
+    Page<BursaryApplication> findAllBySearchAdmin(Pageable pageable, String searchText);
+
+    @Query("FROM tbl_bursary_applications b WHERE b.deleted = 0 AND (b.applicant.userId = :userId)")
+    Page<BursaryApplication> findAllBySearch(Pageable pageable, long userId);
 }

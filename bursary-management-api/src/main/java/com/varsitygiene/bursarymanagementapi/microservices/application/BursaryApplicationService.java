@@ -2,6 +2,8 @@ package com.varsitygiene.bursarymanagementapi.microservices.application;
 
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
+import com.varsitygiene.bursarymanagementapi.microservices.users.User;
+import com.varsitygiene.bursarymanagementapi.microservices.users.UserService;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -10,12 +12,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 @Log4j2
 @AllArgsConstructor
 public class BursaryApplicationService {
     private BursaryApplicationRepository bursaryApplicationRepository;
     private HistoryService historyService;
+
+    private UserService userService;
 
 
     /**
@@ -58,10 +64,17 @@ public class BursaryApplicationService {
         }
     }
 
-    public ResponseEntity<Page<BursaryApplication>> listAllPageAble(Pageable pageable, String searchText) {
+    public ResponseEntity<Page<BursaryApplication>> listAllPageAble(Pageable pageable, String searchText, HttpServletRequest request) {
         try {
-            //AppUser a = appUserService.getUserByHttpRequest(request);
-            return ResponseEntity.ok().body(bursaryApplicationRepository.findAllBySearch(pageable, searchText));
+            User user = userService.getUserByHttpRequest(request);
+            log.info("My Logged in user is : {} with userId -> {}", user.getFirstName(), user.getUserId());
+            if("Administrator".equalsIgnoreCase(user.getUserType())) {
+                log.info("ADMIN SIDE LIST");
+                return ResponseEntity.ok().body(bursaryApplicationRepository.findAllBySearchAdmin(pageable, searchText));
+            }else{
+                log.info("USER SIDE LIST");
+                return ResponseEntity.ok().body(bursaryApplicationRepository.findAllBySearch(pageable, user.getUserId()));
+            }
         }catch (Exception e) {
             log.error("cid=>{} error on create listAllPageAble function.", e);
             return ResponseEntity.badRequest().build();

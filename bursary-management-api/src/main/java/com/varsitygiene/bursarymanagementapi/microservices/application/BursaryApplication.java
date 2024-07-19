@@ -15,7 +15,7 @@ public class BursaryApplication extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long bursaryApplicationId;
-    private String studentNumber = "", enrolmentType = "", matricYear = "", highSchoolName = "", debt = "", tuitionFee = "";
+    private String studentNumber = "", enrolmentType = "", matricYear = "", highSchoolName = "", debt = "", tuitionFee = "", fundingStatus="No";
     @ManyToOne
     private User applicant;
     @OneToMany
