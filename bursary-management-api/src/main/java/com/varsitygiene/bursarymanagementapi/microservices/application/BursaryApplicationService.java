@@ -10,9 +10,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Service
 @Log4j2
@@ -78,6 +80,69 @@ public class BursaryApplicationService {
         }catch (Exception e) {
             log.error("cid=>{} error on create listAllPageAble function.", e);
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Update bursaryApplication
+     */
+    public ResponseEntity update(BursaryApplication bursaryApplication, String correlationId, Authentication authentication) {
+        try {
+            log.info("{} : Start updating bursary application", correlationId);
+
+            if (bursaryApplication == null){
+                log.warn("{} : no content", correlationId);
+                return ResponseEntity.noContent().build();
+            }
+
+            log.info("MY BURSARY ID => {}", bursaryApplication.getBursaryApplicationId());
+
+            BursaryApplication _bursaryApplication = bursaryApplicationRepository.findById(bursaryApplication.getBursaryApplicationId()).orElseThrow(() -> new RuntimeException("Bursary application Not found"));
+
+
+            User userUpdating = userService.getUserByAuthJWT(authentication);
+
+            _bursaryApplication.setUserUpdated(userUpdating);
+            _bursaryApplication.setApplicationStatus(bursaryApplication.getApplicationStatus());
+            _bursaryApplication.setFundingType(bursaryApplication.getFundingType());
+            _bursaryApplication.setRegisteredQualification(bursaryApplication.getRegisteredQualification());
+            _bursaryApplication.setEnrolmentType(bursaryApplication.getEnrolmentType());
+            _bursaryApplication.setStudentNumber(bursaryApplication.getStudentNumber());
+            _bursaryApplication.setHaveCompletedQualification(bursaryApplication.getHaveCompletedQualification());
+            _bursaryApplication.setMatricYear(bursaryApplication.getMatricYear());
+            _bursaryApplication.setHighSchoolName(bursaryApplication.getHighSchoolName());
+            _bursaryApplication.setPreviousYearAverage(bursaryApplication.getPreviousYearAverage());
+            _bursaryApplication.setCompleteOutstandingModule(bursaryApplication.getCompleteOutstandingModule());
+            _bursaryApplication.setFundingSourceForPreviousYear(bursaryApplication.getFundingSourceForPreviousYear());
+            _bursaryApplication.setResidence(bursaryApplication.getResidence());
+
+            if(!Objects.equals(userUpdating.getUserType(), "Administrator")){
+                log.info("The Student Updating Bursary application");
+                User user = new User();
+                user.setFirstName(bursaryApplication.getApplicant().getFirstName());
+                user.setLastName(bursaryApplication.getApplicant().getLastName());
+                user.setIdentityNumber(bursaryApplication.getApplicant().getIdentityNumber());
+                user.setGender(bursaryApplication.getApplicant().getGender());
+                user.setRace(bursaryApplication.getApplicant().getRace());
+                user.setDisability(bursaryApplication.getApplicant().getDisability());
+                user.setAge(bursaryApplication.getApplicant().getAge());
+                user.setHomeLanguage(bursaryApplication.getApplicant().getHomeLanguage());
+                user.setCitizenship(bursaryApplication.getApplicant().getCitizenship());
+                user.setCountryOfBirth(bursaryApplication.getApplicant().getCountryOfBirth());
+                user.setEmploymentStatus(bursaryApplication.getApplicant().getEmploymentStatus());
+                userService.update(user, correlationId, authentication);
+            }
+
+            bursaryApplicationRepository.save(_bursaryApplication);
+            bursaryApplicationRepository.flush();
+            log.info("{} : Bursary application was successfully updated", correlationId);
+
+            return ResponseEntity.ok().body(new ResponseResult(200, "Bursary application was updated successfully", _bursaryApplication));
+        }catch (Exception e){
+            log.error("{} : Error while updating bursary application", correlationId);
+            return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
+        }finally {
+            log.info("{} : Done updating bursary application", correlationId);
         }
     }
 }

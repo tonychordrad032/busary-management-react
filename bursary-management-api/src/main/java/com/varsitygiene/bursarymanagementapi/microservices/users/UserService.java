@@ -96,9 +96,12 @@ public class UserService {
         return ResponseEntity.status(409).body(new ResponseResult(409, "User with email " + user.getUsername() + " Already exist", null));
       }
 
-      if (userRepository.findByMobile(user.getMobile()).size() > 0) {
-        LOG.warn("{} : User with mobile " + user.getMobile() + " already exist");
-        return ResponseEntity.status(409).body(new ResponseResult(409, "User with mobile " + user.getMobile() + " Already exist", null));
+      // Clean the mobile number
+      String cleanedPhoneNumber = user.getMobile().replaceAll("[^\\d]", "");
+
+      if (userRepository.findByMobile(cleanedPhoneNumber).size() > 0) {
+        LOG.warn("{} : User with mobile " + cleanedPhoneNumber + " already exist");
+        return ResponseEntity.status(409).body(new ResponseResult(409, "User with mobile " + cleanedPhoneNumber + " Already exist", null));
       }
 
       //Calling keycloak service
@@ -133,6 +136,8 @@ public class UserService {
           user.setUserUpdated(uO);
         }
       }
+
+
 
       User u = userRepository.save(user);
       LOG.info("AppUser IAM {}, ID {}", u.getIamId(), u.getUserId());

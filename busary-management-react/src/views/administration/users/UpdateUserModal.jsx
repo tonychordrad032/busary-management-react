@@ -53,6 +53,7 @@ const UpdateUserModal = (props) => {
     // Form fields
     const [facultyId, setFacultyId] = useState(0);
     const [userId, setUserId] = useState(0);
+    const [studentNumber, setStudentNumber] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -92,12 +93,14 @@ const UpdateUserModal = (props) => {
   useEffect(() => {
     //fetchDepartmentData(props.data.department?.faculty?.facultyId);
     if(props.action === 'update') {
+       console.log("Mobile number {} ", mobile)
         setUserId(props.data.userId);
+        setStudentNumber(props?.data?.studentNumber);
         setFirstName(props.data.firstName);
         setGender(props.data.gender);
         setLastName(props.data.lastName);
         setUsername(props.data.username);
-        setMobile(props.data.mobile);
+        setMobile(props?.data?.mobile);
         setUserType(props.data.userType);
         setFacultyId(props.data.department?.faculty?.facultyId);
         setDepartmentId(props.data.department?.departmentId);
@@ -330,16 +333,6 @@ const UpdateUserModal = (props) => {
                         onClick={() => setActiveKey(2)}
                         className='modal__nav__item'
                         >
-                        Time Line
-                    </CNavLink>
-                </CNavItem>
-                <CNavItem className='item__nav'>
-                    <CNavLink
-                        //href='javascript:void(0)'
-                        active={activeKey === 3}
-                        onClick={() => setActiveKey(3)}
-                        className='modal__nav__item'
-                        >
                         Change Password
                     </CNavLink>
                 </CNavItem>
@@ -353,8 +346,8 @@ const UpdateUserModal = (props) => {
                               type="text"
                               label="Student Number"
                               placeholder="Enter Your Student Number"
-                              onChange={(e) => setEmployeeNumber(e.target.value)}
-                              value={employeeNumber}
+                              onChange={(e) => setStudentNumber(e.target.value)}
+                              value={studentNumber}
                               required
                             />
                                 <CFormInput
@@ -382,8 +375,8 @@ const UpdateUserModal = (props) => {
                                 value={gender}
                                 >
                                     <option value="">Select Gender</option>
-                                    <option value="M">MALE</option>
-                                    <option value="F">FEMALE</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
                                 </CFormSelect>
                                 <CFormInput
                                     type="number"
@@ -405,6 +398,7 @@ const UpdateUserModal = (props) => {
                                 <CFormSelect 
                                 aria-label="Select user type"
                                 label="User Type"
+                                disabled = {userType == "Administrator" ? false : true}
                                 onChange={(e) => setUserType(e.target.value)}
                                 value={userType}
                                 >
@@ -454,71 +448,10 @@ const UpdateUserModal = (props) => {
                             </tbody>
                           </table>
                         </CCol>
-                        <CCol md={4}>
-                          <ProfileCard
-                              name={firstName} 
-                              lastName= {lastName}
-                              age="28"
-                              userType={userType?.name}
-                              today="0"
-                              week="0"
-                              month="0"
-                              overall="0"
-                          ></ProfileCard>
-                        </CCol>
                         
                     </CRow>
-                   
-                    
                 </CTabPane>
                 <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 2}>
-                <CCardBody>
-                  <CSmartTable
-                    clickableRows
-                    columns={columns}
-                    items={finalList}
-                    scopedColumns={{
-                      show_details: (item) => {
-                        return (
-                          <td className="py-2">
-                            <CButton
-                              color="primary"
-                              //variant="outline"
-                              shape="square"
-                              size="sm"
-                              onClick={() => {toggleDetails(item.id)}}
-                            >
-                              {details.includes(item.id) ? 'Hide' : 'Show'}
-                            </CButton>
-                          </td>
-                        )
-                      },
-                      details: (item) => {
-                        return (
-                          <CCollapse visible={details.includes(item.id)}>
-                            <CCard>
-                              <CCardHeader><b>Data Before</b></CCardHeader>
-                              <CCardBody>{item.dataBefore}</CCardBody>
-                            </CCard>
-                            <CCard className='mt-2'>
-                              <CCardHeader><b>Data After</b></CCardHeader>
-                              <CCardBody>{item.dataAfter}</CCardBody>
-                            </CCard>
-                          </CCollapse>
-                        )
-                      },
-                    }}
-                    selectable
-                    itemsPerPageSelect
-                    pagination
-                  
-                  >
-
-                  </CSmartTable>
-                </CCardBody>
-
-                </CTabPane>
-                <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 3}>
                     <CForm noValidate onSubmit={handleSubmit}>
                         <CCol md={4}>
                             <CFormInput
@@ -548,10 +481,7 @@ const UpdateUserModal = (props) => {
             <CButton color="secondary" onClick={() => setVisible(false)}>
               Close
             </CButton>
-            {
-              (props.role == 'Administrator' || props.role == 'Branch Manager') &&
-                <CButton type='submit' className={deleteUser ? 'd-none' : ''} color="primary" onClick={() => { setValidated(true); handleSave(); }}>Save changes</CButton>
-            }
+            <CButton type='submit' className={deleteUser ? 'd-none' : ''} color="primary" onClick={() => { setValidated(true); handleSave(); }}>Save changes</CButton>
             {
               (props.role == 'Administrator') &&
                 <CButton type='submit' className={deleteUser ? '' : 'd-none'} color="danger" onClick={() => { setValidated(true); handleSave(); }}>Delete {firstName}</CButton>

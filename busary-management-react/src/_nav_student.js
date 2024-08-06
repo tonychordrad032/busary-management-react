@@ -9,6 +9,11 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react-pro'
 const _nav_student = [
   {
     component: CNavItem,
+    name: 'My profile',
+    to: '/list-users',
+  },
+  {
+    component: CNavItem,
     name: 'My Applications',
     to: '/list-bursary-applications',
   }

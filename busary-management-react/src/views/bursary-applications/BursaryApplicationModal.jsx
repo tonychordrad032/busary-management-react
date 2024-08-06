@@ -115,8 +115,28 @@ const BursaryApplicationModal = (props) => {
     // Initialize form field, on modal load
     const InitializeFormFields = (bursaryObj) => {
         setLoading(true);
+        // General Information
+        setFundingType(bursaryObj?.fundingType0);
+        //setFundingAwaiting(bursaryObj?.)
+
+        // Personal Details
         setFirstName(bursaryObj?.applicant?.firstName);
         setLastName(bursaryObj?.applicant?.lastName);
+        setIdentityNumber(bursaryObj?.applicant?.identityNumber);
+        setGender(bursaryObj?.applicant?.gender);
+        setRace(bursaryObj?.applicant?.race);
+        setIsDisable(bursaryObj?.applicant?.isDisable);
+        setAge(bursaryObj?.applicant.age);
+        setHomeLanguage(bursaryObj?.applicant?.homeLanguage);
+        setCitizenship(bursaryObj?.applicant?.citizenship);
+        setBirthCountry(bursaryObj?.applicant?.countryOfBirth);
+
+        // Contact Details
+        setEmail(bursaryObj?.applicant?.email);
+        setMobile(bursaryObj?.applicant?.mobile);
+        setStudyAndResAddressSame(bursaryObj?.applicant?.studyAndResAddressSame);
+        //setRes
+        
         setLoading(false);
     }
 

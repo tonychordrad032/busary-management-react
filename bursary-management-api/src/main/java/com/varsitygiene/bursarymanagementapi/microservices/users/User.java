@@ -16,7 +16,7 @@ public class User extends Base {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long userId;
   private String iamId, username, password, updateFrom, profilePicture, userGuid, otp;
-  private String studentNumber, firstName, lastName, gender, userType, identityNumber, passportNumber, mobile, race;
+  private String studentNumber, firstName, lastName, gender, userType, identityNumber, passportNumber, mobile, race, age, homeLanguage, citizenship, countryOfBirth, employmentStatus, disability;
 
   @ManyToOne
   @JsonIgnore

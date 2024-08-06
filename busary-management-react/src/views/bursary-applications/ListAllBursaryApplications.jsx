@@ -107,7 +107,7 @@ const ListAllBursaryApplications = () => {
                 </CCardHeader>
                     <CCardBody>
                         <div className='row mb-2'>
-                              <div className='col-8'>There are <strong>{bursaryApplicationList.length}</strong> faculties in the system</div>
+                              <div className='col-8'>There are <strong>{bursaryApplicationList.length}</strong> bursary applications in the system</div>
                             <div className='col-4'>
                                 <CInputGroup>
                                     <CFormInput
