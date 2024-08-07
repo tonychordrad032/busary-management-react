@@ -40,6 +40,7 @@ const BursaryApplicationModal = (props) => {
     const [visible, setVisible] = useState(false);
     const [validated, setValidated] = useState(false)
     const [deleteObj, setDeleteObj] = useState(false);
+    const [formValidated, setFormValidated] = useState(false);
     
     // Form Field
     const [bursaryApplicationId, setBursaryApplicationId] = useState(0);
@@ -57,12 +58,25 @@ const BursaryApplicationModal = (props) => {
     const [age, setAge] = useState("");
     const [homeLanguage, setHomeLanguage] = useState("");
     const [citizenship, setCitizenship] = useState("");
-    const [birthCountry, setBirthCountry] = useState("");
+    const [countryOfBirth, setCountryOfBirth] = useState("");
+
+    // Personal Plus
+    const [applicationStatus, setApplicationStatus] = useState("");
+    const [addressType, setAddressType] = useState("");
+    const [postalAddress, setPostalAddress] = useState("");
+    const [postalCode, setPostalCode] = useState("");
+    const [userId, setUserId] = useState(0);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [disability, setDisability] = useState("");
+    const [dob, setDob] = useState("");
+    
 
     // Contact Details
     const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
     const [studyAndResAddressSame, setStudyAndResAddressSame] = useState("");
+    const [residentialAddress, setResidentialAddress] = useState("");
     const [resPostalCode, setResPostalCode] = useState("");
     const [suburb, setSuburb] = useState("");
     const [municipality, setMunicipality] = useState("");
@@ -70,12 +84,13 @@ const BursaryApplicationModal = (props) => {
     const [areaClassification, setAreaClassification] = useState("");
 
     // Education
-    const [qualification, setQualification] = useState("");
+    const [registeredQualification, setRegisteredQualification] = useState("");
     const [enrolmentType, setEnrolmentType] = useState("");
     const [studentNumber, setStudentNumber] = useState("");
     const [haveCompletedQualification, setHaveCompletedQualification] = useState("");
     const [completedQualification, setCompletedQualification] = useState("");
     const [currentLevel, setCurrentLevel] = useState("");
+    const [currentAge, setCurrentAge] = useState("");
     const [matricYear, setMatricYear] = useState("");
     const [highSchoolName, setHighSchoolName] = useState("");
     const [courseAverage, setCourseAverage] = useState("");
@@ -83,6 +98,7 @@ const BursaryApplicationModal = (props) => {
     const [debt, setDebt] = useState("");
     const [lastYearFundingType, setLastFundingType] = useState("");
     const [sponsorship, setSponsorship] = useState("");
+    const [fundingSourceForPreviousYear, setFundingSourceForPreviousYear] = useState("");
     const [tuitionFee, setTuitionFee] = useState("");
     const [residence, setResidence] = useState("");
     const [residenceFee, setResidenceFee] = useState("");
@@ -115,9 +131,13 @@ const BursaryApplicationModal = (props) => {
     // Initialize form field, on modal load
     const InitializeFormFields = (bursaryObj) => {
         setLoading(true);
+        // Personal Plus 
+        
         // General Information
-        setFundingType(bursaryObj?.fundingType0);
-        //setFundingAwaiting(bursaryObj?.)
+        setFundingStatus(bursaryObj?.fundingStatus);
+        setFundingType(bursaryObj?.fundingType);
+        setFundingAwaiting(bursaryObj?.fundingAwaiting);
+
 
         // Personal Details
         setFirstName(bursaryObj?.applicant?.firstName);
@@ -129,16 +149,47 @@ const BursaryApplicationModal = (props) => {
         setAge(bursaryObj?.applicant.age);
         setHomeLanguage(bursaryObj?.applicant?.homeLanguage);
         setCitizenship(bursaryObj?.applicant?.citizenship);
-        setBirthCountry(bursaryObj?.applicant?.countryOfBirth);
+        setCountryOfBirth(bursaryObj?.applicant?.countryOfBirth);
 
         // Contact Details
-        setEmail(bursaryObj?.applicant?.email);
+        setEmail(bursaryObj?.applicant?.username);
         setMobile(bursaryObj?.applicant?.mobile);
-        setStudyAndResAddressSame(bursaryObj?.applicant?.studyAndResAddressSame);
-        //setRes
-        
+        setStudyAndResAddressSame(bursaryObj?.studyAndResAddressSame);
+        setResidentialAddress(bursaryObj?.residentialAddress);
+        setResPostalCode(bursaryObj?.postalCode);
+        setSuburb(bursaryObj?.suburb);
+        setMunicipality(bursaryObj?.municipality);
+        setProvince(bursaryObj?.province);
+        setAreaClassification(bursaryObj?.addressClassification);
+
+        // Education Section\
+        setRegisteredQualification(bursaryObj?.registeredQualification);
+        setEnrolmentType(bursaryObj?.enrolmentType);
+        setStudentNumber(bursaryObj?.applicant?.studentNumber);
+        setHaveCompletedQualification(bursaryObj?.haveCompletedQualification);
+        setCompletedQualification(bursaryObj?.completedQualification);
+        setCurrentLevel(bursaryObj?.currentLevel);
+        setCurrentAge(bursaryObj?.applicant.age);
+        setMatricYear(bursaryObj?.matricYear);
+        setHighSchoolName(bursaryObj?.highSchoolName);
+        setCourseAverage(bursaryObj?.previousYearAverage);
+        setHaveRepeatingModule(bursaryObj?.completeOutstandingModule);
+        setDebt(bursaryObj?.debt);
+        setFundingSourceForPreviousYear(bursaryObj?.fundingSourceForPreviousYear);
+        setResidence(bursaryObj?.residence);
+
+        // Employment
+        setEmploymentStatus(bursaryObj?.applicant?.employmentStatus);
         setLoading(false);
     }
+
+    const validation = () => {
+        if (studentNumber !== '' && studentNumber !== undefined ) {
+            setFormValidated(true)
+        }else{
+            setFormValidated(false)
+        }
+    };
 
     const handleClose = () => {
         clearForm();
@@ -147,46 +198,93 @@ const BursaryApplicationModal = (props) => {
 
     //Handle Save
     const handleSave = async () => {
-        // if (facultyName !== '' && facultyName !== undefined ) {
-        //     setLoading(true);
-        //     let data = {
-        //         "facultyId": facultyId,
-        //         "facultyName": facultyName
-        //       }
+        if (studentNumber !== '' && studentNumber !== undefined ) {
+            setLoading(true);
+            let data = {
+                "bursaryApplicationId": bursaryApplicationId,
+                "studentNumber": studentNumber,
+                "enrolmentType": enrolmentType,
+                "matricYear": matricYear,
+                "highSchoolName": highSchoolName,
+                "debt": debt,
+                "tuitionFee": tuitionFee,
+                "fundingStatus": fundingStatus,
+                "fundingType": fundingType,
+                "applicationStatus": applicationStatus,
+                "haveCompletedQualification": haveCompletedQualification,
+                "completedQualification": completedQualification,
+                "previousYearAverage": courseAverage,
+                "completeOutstandingModule": haveRepeatingModule,
+                "fundingSourceForPreviousYear": fundingSourceForPreviousYear,
+                "residence": residence,
+                "addressType": addressType,
+                "postalAddress": postalAddress,
+                "residentialAddress": residentialAddress,
+                "studyAddressSameAsResidentialAddress": studyAndResAddressSame,
+                "postalCode": postalCode,
+                "suburb": suburb,
+                "municipality": municipality,
+                "province": province,
+                "addressClassification": areaClassification,
+                "registeredQualification": registeredQualification,
+                "applicant": {
+                    "userId": userId,
+                    "username": username,
+                    "password": password,
+                    "updateFrom": "Web",
+                    "studentNumber": studentNumber,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "gender": gender,
+                    "identityNumber": IdentityNumber,
+                    "passportNumber": IdentityNumber,
+                    "mobile": mobile,
+                    "race": race,
+                    "age": age,
+                    "homeLanguage": homeLanguage,
+                    "citizenship": citizenship,
+                    "countryOfBirth": countryOfBirth,
+                    "employmentStatus": employmentStatus,
+                    "disability": disability,
+                    "dob": dob
+                },
+                "documents": [],
+                "qualifications": []
+              }
 
-        //       console.log(data);
+              console.log(data);
 
-        //       let res;
+              let res;
 
-        //       if(props.action === 'update' && !deleteObj) {
-        //           if (window.confirm(`Are you sure you want to update ${facultyName}?`) != true) {
-        //               return;
-        //           }
-        //           res = await http.update('/api/v1/faculty', data);
-        //       }else if(deleteObj){
-        //           if (window.confirm(`Are you sure you want to delete ${facultyName}?`) != true) {
-        //             return;
-        //         }
-        //           res = await http.delete('/api/v1/faculty/' + facultyId);
-        //       }else{
-        //         res = await http.post('/api/v1/faculty', data);
-        //       }
+              if(props.action === 'update' && !deleteObj) {
+                  if (window.confirm(`Are you sure you want to update?`) != true) {
+                      return;
+                  }
+                  res = await http.update('/api/v1/bursary-application', data);
+              }else if(deleteObj){
+                  if (window.confirm(`Are you sure you want to delete?`) != true) {
+                    return;
+                }
+                  res = await http.delete('/api/v1/bursary-application/' + bursaryApplicationId);
+              }else{
+                res = await http.post('/api/v1/bursary-application', data);
+              }
 
-        //     if(res.code === 200 || res.code === 201) {
-        //         toast.success(res.data.responseMessage, Toast.getToastOptions());
-        //         props.fetchData(1, '');
-        //         clearForm();
-        //         setLoading(false);
-        //         handleClose();
-        //     }else {
-        //         toast.error(res.data.response.data.responseMessage, Toast.getToastOptions());
-        //         setLoading(false);
-        //     }
+            if(res.code === 200 || res.code === 201) {
+                toast.success(res.data.responseMessage, Toast.getToastOptions());
+                props.fetchData(1, '');
+                clearForm();
+                setLoading(false);
+                handleClose();
+            }else {
+                toast.error(res.data.response.data.responseMessage, Toast.getToastOptions());
+                setLoading(false);
+            }
             
-        // } else {
-        //     setValidated(true);
-        //     toast.error('Please complete the form', Toast.getToastOptions());
-        // }
+        } else {
+            setValidated(true);
+            toast.error('Please complete the form', Toast.getToastOptions());
+        }
     };
 
     //Handle Save
@@ -548,8 +646,8 @@ const BursaryApplicationModal = (props) => {
                                             type="number"
                                             label="Indicate you country of Birth *"
                                             placeholder="Enter your answer"
-                                            onChange={(e) => setBirthCountry(e.target.value)}
-                                            value={birthCountry}
+                                            onChange={(e) => setCountryOfBirth(e.target.value)}
+                                            value={countryOfBirth}
                                             required
                                             feedbackInvalid="Please country of birth"
                                         />
@@ -672,9 +770,9 @@ const BursaryApplicationModal = (props) => {
                                     <CCol md={8}>
                                         <CFormSelect 
                                             label="Select Registered Qualification to determine if you can move ahead with submission of your details *"
-                                            onChange={(e) => setQualification(e.target.value)}
+                                            onChange={(e) => setRegisteredQualification(e.target.value)}
                                             required
-                                            value={qualification}>
+                                            value={registeredQualification}>
 
                                             <option value="">Choose...</option>
                                             {

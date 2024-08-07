@@ -116,22 +116,20 @@ public class BursaryApplicationService {
             _bursaryApplication.setFundingSourceForPreviousYear(bursaryApplication.getFundingSourceForPreviousYear());
             _bursaryApplication.setResidence(bursaryApplication.getResidence());
 
-            if(!Objects.equals(userUpdating.getUserType(), "Administrator")){
-                log.info("The Student Updating Bursary application");
-                User user = new User();
-                user.setFirstName(bursaryApplication.getApplicant().getFirstName());
-                user.setLastName(bursaryApplication.getApplicant().getLastName());
-                user.setIdentityNumber(bursaryApplication.getApplicant().getIdentityNumber());
-                user.setGender(bursaryApplication.getApplicant().getGender());
-                user.setRace(bursaryApplication.getApplicant().getRace());
-                user.setDisability(bursaryApplication.getApplicant().getDisability());
-                user.setAge(bursaryApplication.getApplicant().getAge());
-                user.setHomeLanguage(bursaryApplication.getApplicant().getHomeLanguage());
-                user.setCitizenship(bursaryApplication.getApplicant().getCitizenship());
-                user.setCountryOfBirth(bursaryApplication.getApplicant().getCountryOfBirth());
-                user.setEmploymentStatus(bursaryApplication.getApplicant().getEmploymentStatus());
-                userService.update(user, correlationId, authentication);
-            }
+            log.info("The Student Updating Bursary application");
+            User user = new User();
+            user.setFirstName(bursaryApplication.getApplicant().getFirstName());
+            user.setLastName(bursaryApplication.getApplicant().getLastName());
+            user.setIdentityNumber(bursaryApplication.getApplicant().getIdentityNumber());
+            user.setGender(bursaryApplication.getApplicant().getGender());
+            user.setRace(bursaryApplication.getApplicant().getRace());
+            user.setDisability(bursaryApplication.getApplicant().getDisability());
+            user.setAge(bursaryApplication.getApplicant().getAge());
+            user.setHomeLanguage(bursaryApplication.getApplicant().getHomeLanguage());
+            user.setCitizenship(bursaryApplication.getApplicant().getCitizenship());
+            user.setCountryOfBirth(bursaryApplication.getApplicant().getCountryOfBirth());
+            user.setEmploymentStatus(bursaryApplication.getApplicant().getEmploymentStatus());
+            userService.update(user, correlationId, authentication);
 
             bursaryApplicationRepository.save(_bursaryApplication);
             bursaryApplicationRepository.flush();
@@ -143,6 +141,35 @@ public class BursaryApplicationService {
             return ResponseEntity.badRequest().body(new ResponseResult(400, e.getMessage(), null));
         }finally {
             log.info("{} : Done updating bursary application", correlationId);
+        }
+    }
+
+    public ResponseEntity delete(long id, String correlationId, Authentication authentication) {
+        try{
+            log.info("cid=>{} start with delete bursary application function. Object => {}", correlationId, id);
+
+            if (id == 0) {
+                log.warn("{} : no content", correlationId);
+                return ResponseEntity.noContent().build();
+            }
+
+            BursaryApplication _bursaryApplication = bursaryApplicationRepository.findById(id).orElseThrow(() -> new RuntimeException("Bursary application Not found"));
+
+            User updater = userService.getUserByAuthJWT(authentication);
+            _bursaryApplication.setDeleted(1);
+            _bursaryApplication.setUserUpdated(updater);
+
+            _bursaryApplication.setDeleted(1);
+
+            BursaryApplication r = bursaryApplicationRepository.save(_bursaryApplication);
+
+            historyService.record(new History("delete bursary application", "delete", "", r.toString(), null));
+            return ResponseEntity.created(null).body(new ResponseResult(201, "Bursary application successfully deleted", r));
+        }catch (Exception e) {
+            log.error("cid=>{} error on delete bursary application function.", correlationId, e);
+            return ResponseEntity.badRequest().body(new ResponseResult(500,e.getMessage(), null));
+        }finally {
+            log.info("cid=>{} finish with delete bursary application function.", correlationId);
         }
     }
 }

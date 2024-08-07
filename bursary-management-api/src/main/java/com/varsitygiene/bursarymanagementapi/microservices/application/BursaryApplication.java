@@ -16,9 +16,9 @@ public class BursaryApplication extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long bursaryApplicationId;
     private String studentNumber = "", enrolmentType = "", matricYear = "", highSchoolName = "", debt = "",
-            tuitionFee = "", fundingStatus="No", fundingType="", applicationStatus="",
+            tuitionFee = "", currentLevel = "",  fundingStatus="No", fundingType="", fundingAwaiting = "", applicationStatus = "",
             haveCompletedQualification="", completedQualification="", previousYearAverage="",
-            completeOutstandingModule="", fundingSourceForPreviousYear="", residence="", addressType = "",
+            completeOutstandingModule="", fundingSourceForPreviousYear="", residence="", studyAndResAddressSame = "No", addressType = "",
             postalAddress = "", residentialAddress = "", studyAddressSameAsResidentialAddress = "No", postalCode = "",
             suburb = "", municipality = "", province = "", addressClassification= "", registeredQualification="";
     @ManyToOne
