@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +20,20 @@ import java.util.UUID;
 public class BursaryApplicationController {
     private BursaryApplicationService bursaryApplicationService;
 
-    @PostMapping
-    public ResponseEntity save(@RequestBody BursaryApplication bursaryApplication){
+    @PostMapping(path = "data-and-image", consumes = {"multipart/form-data", "application/octet-stream", "application/json"})
+    @RolesAllowed({"admin", "user"})
+    public ResponseEntity save(@RequestParam("files") MultipartFile[] files, @RequestPart("data") BursaryApplication bursaryApplication, Authentication authentication){
         String correlationId = UUID.randomUUID().toString();
-        return bursaryApplicationService.save(bursaryApplication, correlationId);
+        return bursaryApplicationService.save(bursaryApplication, correlationId,authentication, null);
     }
+
+    @PostMapping
+    @RolesAllowed({"admin", "user"})
+    public ResponseEntity save(@RequestBody BursaryApplication bursaryApplication, Authentication authentication){
+        String correlationId = UUID.randomUUID().toString();
+        return bursaryApplicationService.save(bursaryApplication, correlationId,authentication, null);
+    }
+
 
     @GetMapping()
     public ResponseEntity listAll(Pageable pageable, @RequestParam String searchText, HttpServletRequest request) {

@@ -65,7 +65,13 @@ const UserModal = (props) => {
     const InitializeFormFields = (userObj) => {
         setLoading(true);
         setUserId(userObj?.userId);
-        setFirstName(userObj?.firstName ?? '');
+        setStudentNumber(userObj?.studentNumber);
+        setIdentityNumber(userObj?.identityNumber);
+        setFirstName(userObj?.firstName);
+        setLastName(userObj?.lastName);
+        setDob(userObj?.dob);
+        setMobile(userObj?.mobile);
+        setUserType(userObj?.userType);
         setLoading(false);
     }
 
@@ -239,8 +245,8 @@ const UserModal = (props) => {
                     value={gender}
                   >
                     <option value="">Select Gender</option>
-                    <option value="M">MALE</option>
-                    <option value="F">FEMALE</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
                   </CFormSelect>
                    <CFormInput
                       type="number"

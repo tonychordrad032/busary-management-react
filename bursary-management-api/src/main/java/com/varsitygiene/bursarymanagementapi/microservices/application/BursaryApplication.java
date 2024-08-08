@@ -20,7 +20,7 @@ public class BursaryApplication extends Base {
             haveCompletedQualification="", completedQualification="", previousYearAverage="",
             completeOutstandingModule="", fundingSourceForPreviousYear="", residence="", studyAndResAddressSame = "No", addressType = "",
             postalAddress = "", residentialAddress = "", studyAddressSameAsResidentialAddress = "No", postalCode = "",
-            suburb = "", municipality = "", province = "", addressClassification= "", registeredQualification="";
+            suburb = "", municipality = "", province = "", addressClassification= "", registeredQualification="", lastYearFundingType="";
     @ManyToOne
     private User applicant;
 
@@ -28,7 +28,7 @@ public class BursaryApplication extends Base {
     private User userCreated;
     @ManyToOne
     private User userUpdated;
-    @OneToMany
+    @OneToMany(mappedBy = "bursaryApplication", cascade = CascadeType.ALL)
     private List<Document> documents;
     @OneToMany
     private List<Qualification> qualifications;

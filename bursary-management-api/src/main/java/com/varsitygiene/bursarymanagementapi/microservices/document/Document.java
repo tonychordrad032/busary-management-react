@@ -1,6 +1,7 @@
 package com.varsitygiene.bursarymanagementapi.microservices.document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplication;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,10 @@ public class Document {
     private LocalDateTime capturedDate;
     private LocalDateTime dateAdded;
     private LocalDateTime dateUpdated;
+
+    @JsonIgnore
+    @ManyToOne
+    private BursaryApplication bursaryApplication;
 
     @PrePersist
     private void onCreate()

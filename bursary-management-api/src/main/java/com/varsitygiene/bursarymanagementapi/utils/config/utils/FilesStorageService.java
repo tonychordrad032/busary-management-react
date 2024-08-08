@@ -50,6 +50,18 @@ public class FilesStorageService {
         }
     }
 
+  public Path save(MultipartFile file, String fileName) {
+    try {
+      Path cc = this.root.resolve(fileName);
+      Files.copy(file.getInputStream(), this.root.resolve(fileName));
+      return  cc;
+    } catch (Exception e) {
+      //throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
+      log.warn("Could not store the file. Error: " + e.getMessage());
+      return null;
+    }
+  }
+
 
     public void saveBase64(String base64) {
         try {
@@ -98,7 +110,7 @@ public class FilesStorageService {
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
         } catch (IOException e) {
-            throw new RuntimeException("Could not load the document!");
+            throw new RuntimeException("Could not load the files!");
         }
     }
 }

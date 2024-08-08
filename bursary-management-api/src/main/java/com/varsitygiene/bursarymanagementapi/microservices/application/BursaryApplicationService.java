@@ -1,9 +1,12 @@
 package com.varsitygiene.bursarymanagementapi.microservices.application;
 
+import com.varsitygiene.bursarymanagementapi.microservices.document.Document;
+import com.varsitygiene.bursarymanagementapi.microservices.document.DocumentRepository;
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
 import com.varsitygiene.bursarymanagementapi.microservices.users.User;
 import com.varsitygiene.bursarymanagementapi.microservices.users.UserService;
+import com.varsitygiene.bursarymanagementapi.utils.config.utils.FilesStorageService;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Service
@@ -22,6 +27,8 @@ import java.util.Objects;
 public class BursaryApplicationService {
     private BursaryApplicationRepository bursaryApplicationRepository;
     private HistoryService historyService;
+    private final FilesStorageService storageService;
+    private DocumentRepository documentRepository;
 
     private UserService userService;
 
@@ -33,7 +40,7 @@ public class BursaryApplicationService {
     //* @param authentication
      * @return
      */
-    public ResponseEntity save(BursaryApplication bursaryApplication, String correlationId){
+    public ResponseEntity save(BursaryApplication bursaryApplication, String correlationId, Authentication authentication, MultipartFile[] files){
         try{
             log.info("cid=>{} start with create bursary application function. Object => {}", correlationId);
             if(bursaryApplication == null){
@@ -41,20 +48,27 @@ public class BursaryApplicationService {
                 throw new Exception("No Content");
             }
 
-            //BursaryApplication _bursaryApplication = bursaryApplicationRepository.findByQualificationName(qualification.getQualificationName());
-
-//            if(_qualification != null) {
-//                log.warn(qualification + " Already exists.");
-//                return ResponseEntity.status(409).body(new ResponseResult(409, qualification.getQualificationName() + " Already exists", qualification));
-//            }
-
-            /*AppUser a = appUserService.getUserByAuthJWT(authentication);
+            User a = userService.getUserByAuthJWT(authentication);
             if(a != null) {
-                region.setSourceCompany(a.getSourceCompany());
-                region.setUserCreated(a);
-                region.setUserUpdated(a);
-            }*/
+                bursaryApplication.setUserCreated(a);
+                bursaryApplication.setUserUpdated(a);
+            }
             BursaryApplication b = bursaryApplicationRepository.save(bursaryApplication);
+
+            // This handles documents
+            if(files != null && files.length > 0){
+                Arrays.asList(files).stream().forEach(file -> {
+                    log.info("start adding file...{}", file.getOriginalFilename());
+                    String fileName = "bursary-applicant-"+ bursaryApplication.getBursaryApplicationId() + "-" + file.getOriginalFilename().replaceAll(" ", "_");
+                    storageService.save(file, fileName);
+                    Document document = new Document();
+                    document.setBursaryApplication(b);
+                    document.setFileName(fileName);
+                    document.setFileSize(file.getSize());
+                    document.setFileType(file.getContentType());
+                    documentRepository.save(document);
+                });
+            }
 
             historyService.record(new History("new bursary application", "save", "","", null));
             return ResponseEntity.created(null).body(new ResponseResult(201, "Application successfully created", bursaryApplication));
@@ -102,25 +116,24 @@ public class BursaryApplicationService {
 
             User userUpdating = userService.getUserByAuthJWT(authentication);
 
+
             _bursaryApplication.setUserUpdated(userUpdating);
             _bursaryApplication.setApplicationStatus(bursaryApplication.getApplicationStatus());
-            _bursaryApplication.setFundingType(bursaryApplication.getFundingType());
-            _bursaryApplication.setRegisteredQualification(bursaryApplication.getRegisteredQualification());
-            _bursaryApplication.setEnrolmentType(bursaryApplication.getEnrolmentType());
-            _bursaryApplication.setStudentNumber(bursaryApplication.getStudentNumber());
-            _bursaryApplication.setHaveCompletedQualification(bursaryApplication.getHaveCompletedQualification());
-            _bursaryApplication.setMatricYear(bursaryApplication.getMatricYear());
-            _bursaryApplication.setHighSchoolName(bursaryApplication.getHighSchoolName());
-            _bursaryApplication.setPreviousYearAverage(bursaryApplication.getPreviousYearAverage());
-            _bursaryApplication.setCompleteOutstandingModule(bursaryApplication.getCompleteOutstandingModule());
-            _bursaryApplication.setFundingSourceForPreviousYear(bursaryApplication.getFundingSourceForPreviousYear());
-            _bursaryApplication.setResidence(bursaryApplication.getResidence());
 
+            // General  Information
+            _bursaryApplication.setFundingStatus(bursaryApplication.getFundingStatus());
+            _bursaryApplication.setFundingType(bursaryApplication.getFundingType());
+            _bursaryApplication.setFundingAwaiting(bursaryApplication.getFundingAwaiting());
+
+            // Personal Details
             log.info("The Student Updating Bursary application");
             User user = new User();
+            user.setUserId(bursaryApplication.getApplicant().getUserId());
             user.setFirstName(bursaryApplication.getApplicant().getFirstName());
             user.setLastName(bursaryApplication.getApplicant().getLastName());
             user.setIdentityNumber(bursaryApplication.getApplicant().getIdentityNumber());
+            user.setMobile(bursaryApplication.getApplicant().getMobile());
+            user.setStudentNumber(bursaryApplication.getStudentNumber());
             user.setGender(bursaryApplication.getApplicant().getGender());
             user.setRace(bursaryApplication.getApplicant().getRace());
             user.setDisability(bursaryApplication.getApplicant().getDisability());
@@ -130,6 +143,33 @@ public class BursaryApplicationService {
             user.setCountryOfBirth(bursaryApplication.getApplicant().getCountryOfBirth());
             user.setEmploymentStatus(bursaryApplication.getApplicant().getEmploymentStatus());
             userService.update(user, correlationId, authentication);
+
+            // Contact Details
+            _bursaryApplication.setHaveCompletedQualification(bursaryApplication.getHaveCompletedQualification());
+            _bursaryApplication.setStudyAddressSameAsResidentialAddress(bursaryApplication.getStudyAddressSameAsResidentialAddress());
+            _bursaryApplication.setResidentialAddress(bursaryApplication.getResidentialAddress());
+            _bursaryApplication.setPostalCode(bursaryApplication.getPostalCode());
+            _bursaryApplication.setSuburb(bursaryApplication.getSuburb());
+            _bursaryApplication.setMunicipality(bursaryApplication.getMunicipality());
+            _bursaryApplication.setProvince(bursaryApplication.getProvince());
+            _bursaryApplication.setAddressClassification(bursaryApplication.getAddressClassification());
+
+            // Education
+            _bursaryApplication.setRegisteredQualification(bursaryApplication.getRegisteredQualification());
+            _bursaryApplication.setEnrolmentType(bursaryApplication.getEnrolmentType());
+            _bursaryApplication.setCompletedQualification(bursaryApplication.getCompletedQualification());
+            _bursaryApplication.setCurrentLevel(bursaryApplication.getCurrentLevel());
+            _bursaryApplication.setStudentNumber(bursaryApplication.getStudentNumber());
+            _bursaryApplication.setMatricYear(bursaryApplication.getMatricYear());
+            _bursaryApplication.setHighSchoolName(bursaryApplication.getHighSchoolName());
+            _bursaryApplication.setPreviousYearAverage(bursaryApplication.getPreviousYearAverage());
+            _bursaryApplication.setCompleteOutstandingModule(bursaryApplication.getCompleteOutstandingModule());
+            _bursaryApplication.setDebt(bursaryApplication.getDebt());
+            _bursaryApplication.setLastYearFundingType(bursaryApplication.getLastYearFundingType());
+            _bursaryApplication.setFundingSourceForPreviousYear(bursaryApplication.getFundingSourceForPreviousYear());
+            _bursaryApplication.setResidence(bursaryApplication.getResidence());
+
+
 
             bursaryApplicationRepository.save(_bursaryApplication);
             bursaryApplicationRepository.flush();

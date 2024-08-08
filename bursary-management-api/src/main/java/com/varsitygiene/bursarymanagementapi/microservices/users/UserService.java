@@ -203,6 +203,12 @@ public class UserService {
       _user.setIdentityNumber(user.getIdentityNumber());
       _user.setPassportNumber(user.getPassportNumber());
       _user.setStudentNumber(user.getStudentNumber());
+      _user.setDisability(user.getDisability());
+      _user.setAge(user.getAge());
+      _user.setHomeLanguage(user.getHomeLanguage());
+      _user.setCitizenship(user.getCitizenship());
+      _user.setCountryOfBirth(user.getCountryOfBirth());
+      _user.setEmploymentStatus(user.getEmploymentStatus());
 
       userRepository.save(_user);
       userRepository.flush();

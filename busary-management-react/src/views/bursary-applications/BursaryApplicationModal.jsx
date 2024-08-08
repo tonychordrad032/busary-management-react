@@ -63,13 +63,13 @@ const BursaryApplicationModal = (props) => {
     // Personal Plus
     const [applicationStatus, setApplicationStatus] = useState("");
     const [addressType, setAddressType] = useState("");
-    const [postalAddress, setPostalAddress] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [userId, setUserId] = useState(0);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [disability, setDisability] = useState("");
     const [dob, setDob] = useState("");
+   
     
 
     // Contact Details
@@ -77,7 +77,7 @@ const BursaryApplicationModal = (props) => {
     const [mobile, setMobile] = useState("");
     const [studyAndResAddressSame, setStudyAndResAddressSame] = useState("");
     const [residentialAddress, setResidentialAddress] = useState("");
-    const [resPostalCode, setResPostalCode] = useState("");
+    const [postalAddress, setPostalAddress] = useState("");
     const [suburb, setSuburb] = useState("");
     const [municipality, setMunicipality] = useState("");
     const [province, setProvince] = useState("");
@@ -132,6 +132,9 @@ const BursaryApplicationModal = (props) => {
     const InitializeFormFields = (bursaryObj) => {
         setLoading(true);
         // Personal Plus 
+        setUserId(bursaryObj?.applicant?.userId);
+        setBursaryApplicationId(bursaryObj?.bursaryApplicationId);
+        
         
         // General Information
         setFundingStatus(bursaryObj?.fundingStatus);
@@ -145,8 +148,8 @@ const BursaryApplicationModal = (props) => {
         setIdentityNumber(bursaryObj?.applicant?.identityNumber);
         setGender(bursaryObj?.applicant?.gender);
         setRace(bursaryObj?.applicant?.race);
-        setIsDisable(bursaryObj?.applicant?.isDisable);
-        setAge(bursaryObj?.applicant.age);
+        setDisability(bursaryObj?.applicant?.disability);
+        setAge(bursaryObj?.applicant?.age);
         setHomeLanguage(bursaryObj?.applicant?.homeLanguage);
         setCitizenship(bursaryObj?.applicant?.citizenship);
         setCountryOfBirth(bursaryObj?.applicant?.countryOfBirth);
@@ -154,9 +157,9 @@ const BursaryApplicationModal = (props) => {
         // Contact Details
         setEmail(bursaryObj?.applicant?.username);
         setMobile(bursaryObj?.applicant?.mobile);
-        setStudyAndResAddressSame(bursaryObj?.studyAndResAddressSame);
+        setStudyAndResAddressSame(bursaryObj?.studyAddressSameAsResidentialAddress);
         setResidentialAddress(bursaryObj?.residentialAddress);
-        setResPostalCode(bursaryObj?.postalCode);
+        setPostalCode(bursaryObj?.postalCode);
         setSuburb(bursaryObj?.suburb);
         setMunicipality(bursaryObj?.municipality);
         setProvince(bursaryObj?.province);
@@ -165,7 +168,7 @@ const BursaryApplicationModal = (props) => {
         // Education Section\
         setRegisteredQualification(bursaryObj?.registeredQualification);
         setEnrolmentType(bursaryObj?.enrolmentType);
-        setStudentNumber(bursaryObj?.applicant?.studentNumber);
+        setStudentNumber(bursaryObj?.studentNumber);
         setHaveCompletedQualification(bursaryObj?.haveCompletedQualification);
         setCompletedQualification(bursaryObj?.completedQualification);
         setCurrentLevel(bursaryObj?.currentLevel);
@@ -175,6 +178,7 @@ const BursaryApplicationModal = (props) => {
         setCourseAverage(bursaryObj?.previousYearAverage);
         setHaveRepeatingModule(bursaryObj?.completeOutstandingModule);
         setDebt(bursaryObj?.debt);
+        setLastFundingType(bursaryObj?.lastYearFundingType);
         setFundingSourceForPreviousYear(bursaryObj?.fundingSourceForPreviousYear);
         setResidence(bursaryObj?.residence);
 
@@ -210,10 +214,13 @@ const BursaryApplicationModal = (props) => {
                 "tuitionFee": tuitionFee,
                 "fundingStatus": fundingStatus,
                 "fundingType": fundingType,
+                "fundingAwaiting": fundingAwaiting,
                 "applicationStatus": applicationStatus,
                 "haveCompletedQualification": haveCompletedQualification,
                 "completedQualification": completedQualification,
                 "previousYearAverage": courseAverage,
+                "currentLevel": currentLevel,
+                "lastYearFundingType": lastYearFundingType,
                 "completeOutstandingModule": haveRepeatingModule,
                 "fundingSourceForPreviousYear": fundingSourceForPreviousYear,
                 "residence": residence,
@@ -577,9 +584,9 @@ const BursaryApplicationModal = (props) => {
                                          <CFormSelect 
                                             //aria-label="Select your Gender *"
                                             label="Do you have any disabilities? *"
-                                            onChange={(e) => setIsDisable(e.target.value)}
+                                            onChange={(e) => setDisability(e.target.value)}
                                             required
-                                            value={isDisable}>
+                                            value={disability}>
 
                                             <option value="">Choose...</option>
                                             {
@@ -643,7 +650,7 @@ const BursaryApplicationModal = (props) => {
                                         </CFormSelect>
                                          <br />
                                         <CFormInput
-                                            type="number"
+                                            type="text"
                                             label="Indicate you country of Birth *"
                                             placeholder="Enter your answer"
                                             onChange={(e) => setCountryOfBirth(e.target.value)}
@@ -699,8 +706,8 @@ const BursaryApplicationModal = (props) => {
                                             type="text"
                                             label="Enter your Residential Address. *"
                                             placeholder="Enter your answer"
-                                            onChange={(e) => setResidence(e.target.value)}
-                                            value={residence}
+                                            onChange={(e) => setResidentialAddress(e.target.value)}
+                                            value={residentialAddress}
                                             required
                                             feedbackInvalid="Please enter residential address"
                                         />
@@ -709,8 +716,8 @@ const BursaryApplicationModal = (props) => {
                                             type="text"
                                             label="Enter your Residential Postal code. *"
                                             placeholder="Enter your answer"
-                                            onChange={(e) => setResPostalCode(e.target.value)}
-                                            value={resPostalCode}
+                                            onChange={(e) => setPostalCode(e.target.value)}
+                                            value={postalCode}
                                             required
                                             feedbackInvalid="Please Residential Postal Code"
                                         />
@@ -944,8 +951,8 @@ const BursaryApplicationModal = (props) => {
                                             type="text"
                                             label="What funding resource did you use to pay for your 2021 year of studies? *"
                                             placeholder="Enter your answer"
-                                            onChange={(e) => setSponsorship(e.target.value)}
-                                            value={sponsorship}
+                                            onChange={(e) => setFundingSourceForPreviousYear(e.target.value)}
+                                            value={fundingSourceForPreviousYear}
                                             required
                                             //feedbackInvalid="Please select course average"
                                         />
