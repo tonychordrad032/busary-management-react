@@ -16,7 +16,12 @@ import {
     CTabContent,
     CTabPane,
     CRow,
-    CCol
+    CCol,
+    CCard,
+    CCardImage,
+    CCardBody,
+    CCardTitle,
+    CCardText
 
 } from '@coreui/react-pro'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,6 +36,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import HttpFunction from 'src/core/HttpFunction';
 import { Toast } from 'src/core/Toast';
 import LoadSpinner from 'src/components/LoadSpinner';
+import DocumentModal from './DocumentModal';
+import { logo } from 'src/assets/brand/logo';
 
 
 const BursaryApplicationModal = (props) => {
@@ -1012,6 +1019,18 @@ const BursaryApplicationModal = (props) => {
                             </CTabPane>
                             <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={activeKey === 6}>
                                 <h3>Documents</h3>
+                                <DocumentModal/>
+                                <CCard className='mt-3' style={{ width: '18rem' }}>
+                                <CCardImage orientation="top" src={logo} />
+                                <CCardBody>
+                                    <CCardTitle>Card title</CCardTitle>
+                                    <CCardText>
+                                    Some quick example text to build on the card title and make up the bulk of the cards content.
+                                    </CCardText>
+                                    <CButton color="primary" href="#">Go somewhere</CButton>
+                                </CCardBody>
+                                </CCard>
+
                             </CTabPane>
                         </CTabContent>
                   </CForm>

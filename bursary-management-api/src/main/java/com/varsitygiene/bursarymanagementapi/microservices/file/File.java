@@ -1,32 +1,29 @@
-package com.varsitygiene.bursarymanagementapi.microservices.document;
+package com.varsitygiene.bursarymanagementapi.microservices.file;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplication;
-import com.varsitygiene.bursarymanagementapi.microservices.file.File;
-import lombok.Data;
+import com.varsitygiene.bursarymanagementapi.microservices.document.Document;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@Entity(name = "tbl_documents")
-public class Document {
+@Getter
+@Setter
+@Entity(name = "tbl_files")
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long documentId;
-    private long deleted=0;
-    private String documentName="", documentType = "";
+    private long fileId;
+    private long fileSize=0, deleted=0;
+    private String fileName="", fileType="";
     private LocalDateTime capturedDate;
     private LocalDateTime dateAdded;
     private LocalDateTime dateUpdated;
 
     @JsonIgnore
     @OneToOne
-    private File file;
-
-    @JsonIgnore
-    @ManyToOne
-    private BursaryApplication bursaryApplication;
+    private Document document;
 
     @PrePersist
     private void onCreate()
@@ -40,5 +37,4 @@ public class Document {
     private void onUpdate() {
         this.dateUpdated = LocalDateTime.now();
     }
-
 }

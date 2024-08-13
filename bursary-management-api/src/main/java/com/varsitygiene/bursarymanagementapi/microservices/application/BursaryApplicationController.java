@@ -20,18 +20,12 @@ import java.util.UUID;
 public class BursaryApplicationController {
     private BursaryApplicationService bursaryApplicationService;
 
-    @PostMapping(path = "data-and-image", consumes = {"multipart/form-data", "application/octet-stream", "application/json"})
-    @RolesAllowed({"admin", "user"})
-    public ResponseEntity save(@RequestParam("files") MultipartFile[] files, @RequestPart("data") BursaryApplication bursaryApplication, Authentication authentication){
-        String correlationId = UUID.randomUUID().toString();
-        return bursaryApplicationService.save(bursaryApplication, correlationId,authentication, null);
-    }
 
     @PostMapping
     @RolesAllowed({"admin", "user"})
     public ResponseEntity save(@RequestBody BursaryApplication bursaryApplication, Authentication authentication){
         String correlationId = UUID.randomUUID().toString();
-        return bursaryApplicationService.save(bursaryApplication, correlationId,authentication, null);
+        return bursaryApplicationService.save(bursaryApplication, correlationId,authentication);
     }
 
 

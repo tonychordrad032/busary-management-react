@@ -1,12 +1,10 @@
 package com.varsitygiene.bursarymanagementapi.microservices.application;
 
-import com.varsitygiene.bursarymanagementapi.microservices.document.Document;
 import com.varsitygiene.bursarymanagementapi.microservices.document.DocumentRepository;
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
 import com.varsitygiene.bursarymanagementapi.microservices.users.User;
 import com.varsitygiene.bursarymanagementapi.microservices.users.UserService;
-import com.varsitygiene.bursarymanagementapi.utils.config.utils.FilesStorageService;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,11 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Objects;
 
 @Service
 @Log4j2
@@ -27,7 +22,7 @@ import java.util.Objects;
 public class BursaryApplicationService {
     private BursaryApplicationRepository bursaryApplicationRepository;
     private HistoryService historyService;
-    private final FilesStorageService storageService;
+
     private DocumentRepository documentRepository;
 
     private UserService userService;
@@ -40,7 +35,7 @@ public class BursaryApplicationService {
     //* @param authentication
      * @return
      */
-    public ResponseEntity save(BursaryApplication bursaryApplication, String correlationId, Authentication authentication, MultipartFile[] files){
+    public ResponseEntity save(BursaryApplication bursaryApplication, String correlationId, Authentication authentication){
         try{
             log.info("cid=>{} start with create bursary application function. Object => {}", correlationId);
             if(bursaryApplication == null){
@@ -55,20 +50,7 @@ public class BursaryApplicationService {
             }
             BursaryApplication b = bursaryApplicationRepository.save(bursaryApplication);
 
-            // This handles documents
-            if(files != null && files.length > 0){
-                Arrays.asList(files).stream().forEach(file -> {
-                    log.info("start adding file...{}", file.getOriginalFilename());
-                    String fileName = "bursary-applicant-"+ bursaryApplication.getBursaryApplicationId() + "-" + file.getOriginalFilename().replaceAll(" ", "_");
-                    storageService.save(file, fileName);
-                    Document document = new Document();
-                    document.setBursaryApplication(b);
-                    document.setFileName(fileName);
-                    document.setFileSize(file.getSize());
-                    document.setFileType(file.getContentType());
-                    documentRepository.save(document);
-                });
-            }
+
 
             historyService.record(new History("new bursary application", "save", "","", null));
             return ResponseEntity.created(null).body(new ResponseResult(201, "Application successfully created", bursaryApplication));
