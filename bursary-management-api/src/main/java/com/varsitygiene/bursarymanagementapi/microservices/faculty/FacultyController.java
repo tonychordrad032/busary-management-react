@@ -26,12 +26,11 @@ public class FacultyController {
         return facultyService.save(faculty, correlationId, request);
     }
 
-    @GetMapping
+    @GetMapping()
     @RolesAllowed({"admin", "user"})
     public ResponseEntity listAllPageable(Pageable pageable, @RequestParam String searchText){
         return facultyService.listAllPageAble(pageable, searchText);
     }
-
 
 
     @PutMapping
