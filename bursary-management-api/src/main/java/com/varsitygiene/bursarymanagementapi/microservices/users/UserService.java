@@ -2,14 +2,12 @@ package com.varsitygiene.bursarymanagementapi.microservices.users;
 
 import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplication;
 import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplicationRepository;
-import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplicationService;
 import com.varsitygiene.bursarymanagementapi.microservices.auth.AppAuth;
 import com.varsitygiene.bursarymanagementapi.microservices.history.History;
 import com.varsitygiene.bursarymanagementapi.microservices.history.HistoryService;
-import com.varsitygiene.bursarymanagementapi.utils.config.utils.EmailSender;
+import com.varsitygiene.bursarymanagementapi.utils.utils.EmailSender;
 import com.varsitygiene.bursarymanagementapi.utils.dto.ResetPassword;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

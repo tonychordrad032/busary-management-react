@@ -1,14 +1,12 @@
 package com.varsitygiene.bursarymanagementapi.microservices.document;
 
-import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplication;
 import com.varsitygiene.bursarymanagementapi.microservices.application.BursaryApplicationRepository;
 import com.varsitygiene.bursarymanagementapi.microservices.file.File;
 import com.varsitygiene.bursarymanagementapi.microservices.file.FileRepository;
-import com.varsitygiene.bursarymanagementapi.utils.config.utils.FilesStorageService;
+import com.varsitygiene.bursarymanagementapi.utils.utils.FilesStorageService;
 import com.varsitygiene.bursarymanagementapi.utils.helpers.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

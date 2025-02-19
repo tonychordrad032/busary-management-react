@@ -1,4 +1,4 @@
-package com.varsitygiene.bursarymanagementapi.utils.config.utils;
+package com.varsitygiene.bursarymanagementapi.utils.utils;
 
 
 import org.springframework.beans.factory.annotation.Value;

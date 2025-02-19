@@ -1,7 +1,7 @@
-package com.varsitygiene.bursarymanagementapi.utils.config.utils;
+package com.varsitygiene.bursarymanagementapi.utils.utils;
 
 /**
- * @Author Nhlanhla Mkhize 2022-06-30
+ * @Author Senele Nyaba 2024-11-30
  * @REF https://www.bezkoder.com/spring-boot-file-upload/
  */
 

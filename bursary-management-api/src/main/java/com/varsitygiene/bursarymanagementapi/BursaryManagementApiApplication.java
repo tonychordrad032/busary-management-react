@@ -1,8 +1,6 @@
 package com.varsitygiene.bursarymanagementapi;
 
-import com.varsitygiene.bursarymanagementapi.microservices.faculty.FacultyRepository;
-import com.varsitygiene.bursarymanagementapi.utils.config.defaultdata.FacultyDataConfig;
-import com.varsitygiene.bursarymanagementapi.utils.config.utils.FilesStorageService;
+import com.varsitygiene.bursarymanagementapi.utils.utils.FilesStorageService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
